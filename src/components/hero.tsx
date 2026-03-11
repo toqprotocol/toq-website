@@ -162,10 +162,10 @@ export default function Hero() {
       <LiquidGlassFilters />
 
       {/* Noise texture */}
-      <div className="absolute inset-0 z-[1] opacity-50 pointer-events-none mix-blend-overlay" style={{ backgroundImage: "url('/noise.png')", backgroundRepeat: "repeat", backgroundSize: "256px 256px" }} />
+      <div className="absolute inset-0 z-[1] opacity-50 pointer-events-none mix-blend-overlay hidden md:block" style={{ backgroundImage: "url('/noise.png')", backgroundRepeat: "repeat", backgroundSize: "256px 256px" }} />
 
       {/* Gradient orbs */}
-      <div className="absolute inset-0 z-[0] overflow-hidden pointer-events-none">
+      <div className="absolute inset-0 z-[0] overflow-hidden pointer-events-none hidden md:block">
         <motion.div
           className="absolute rounded-full"
           style={{ width: "60vw", height: "60vw", background: "radial-gradient(circle, rgba(246,62,2,0.3) 0%, transparent 70%)", filter: "blur(80px)", top: "-10%", left: "-10%" }}
