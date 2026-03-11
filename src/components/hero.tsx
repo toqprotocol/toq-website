@@ -69,8 +69,7 @@ function GlassPill({ children, className = "", href, ...props }: any) {
       <div
         className="absolute inset-0"
         style={{
-          backdropFilter: "blur(12px) brightness(1.05) saturate(1.2)",
-          WebkitBackdropFilter: "blur(12px) brightness(1.05) saturate(1.2)",
+          background: "linear-gradient(160deg, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.12) 100%)",
         }}
       />
       <div
@@ -125,13 +124,6 @@ function NavPill() {
   return (
     <div ref={containerRef} className="relative flex items-center rounded-full overflow-hidden">
       <div
-        className="absolute inset-0"
-        style={{
-          backdropFilter: "blur(12px) brightness(1.05) saturate(1.2)",
-          WebkitBackdropFilter: "blur(12px) brightness(1.05) saturate(1.2)",
-        }}
-      />
-      <div
         className="absolute inset-0 rounded-full"
         style={{
           background: "linear-gradient(160deg, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.12) 100%)",
@@ -145,6 +137,8 @@ function NavPill() {
           height: "100%",
           top: 0,
           zIndex: 5,
+          backdropFilter: "blur(2px) brightness(1.05) saturate(1.2)",
+          WebkitBackdropFilter: "blur(2px) brightness(1.05) saturate(1.2)",
           background: "linear-gradient(160deg, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.12) 100%)",
           boxShadow: "inset 0 1px 0 rgba(255,255,255,0.5), inset 0 -1px 0 rgba(255,255,255,0.08), inset 1px 0 0 rgba(255,255,255,0.12), inset -1px 0 0 rgba(255,255,255,0.12), 0 4px 20px rgba(0,0,0,0.12)",
           border: "1px solid rgba(255,255,255,0.3)",
@@ -312,8 +306,8 @@ export default function Hero() {
         </motion.h1>
 
         <motion.p
-          className="mt-8 text-lg md:text-xl font-light text-white/60 text-center max-w-lg leading-relaxed"
-          style={{ fontFamily: font, fontWeight: 300 }}
+          className="mt-8 text-lg md:text-xl text-white/60 text-center max-w-lg leading-relaxed"
+          style={{ fontFamily: font, fontWeight: 400 }}
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.8 }}
@@ -330,16 +324,10 @@ export default function Hero() {
           transition={{ duration: 0.8, delay: 1.1 }}
         >
           <GlassPill href="/getting-started/quickstart/" className="px-8 py-3">
-            <span className="text-white text-base font-light flex items-center gap-2">
+            <span className="text-white text-base font-normal flex items-center gap-2">
               Get Started <ArrowUpRight />
             </span>
           </GlassPill>
-          <a
-            href="https://github.com/toqprotocol"
-            className="text-white/60 text-base font-light no-underline hover:text-white/90 transition-colors flex items-center gap-2"
-          >
-            <GitHubIcon /> GitHub
-          </a>
         </motion.div>
       </div>
 
