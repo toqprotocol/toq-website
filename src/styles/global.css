@@ -39,7 +39,6 @@ html {
 }
 
 /* Starlight theme overrides */
-:root,
 :root[data-theme='light'] {
   --sl-color-accent-low: #fff3e0;
   --sl-color-accent: #E57C04;
@@ -69,4 +68,44 @@ html {
 
 .social-icons::after {
   display: none;
+}
+
+/* Glass pagination buttons */
+.pagination-links a {
+  background: rgba(250,248,245,0.8) !important;
+  border: 2px solid rgba(0,0,0,0.1) !important;
+  box-shadow: inset 0 2px 0 rgba(255,255,255,0.8), inset 0 -2px 0 rgba(0,0,0,0.05), 0 4px 20px rgba(0,0,0,0.08) !important;
+  backdrop-filter: blur(20px) saturate(1.4) brightness(1.1) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(1.4) brightness(1.1) !important;
+  border-radius: 999px !important;
+  padding: 1rem 2rem !important;
+  transition: all 0.2s ease !important;
+}
+
+.pagination-links a:hover {
+  background: rgba(250,248,245,0.95) !important;
+  box-shadow: inset 0 2px 0 rgba(255,255,255,0.9), inset 0 -2px 0 rgba(0,0,0,0.08), 0 8px 32px rgba(0,0,0,0.12) !important;
+}
+
+/* Glass search bar */
+site-search button {
+  background: rgba(250,248,245,0.8) !important;
+  border: 2px solid rgba(0,0,0,0.1) !important;
+  box-shadow: inset 0 2px 0 rgba(255,255,255,0.8), inset 0 -2px 0 rgba(0,0,0,0.05), 0 4px 20px rgba(0,0,0,0.08) !important;
+  backdrop-filter: blur(20px) saturate(1.4) brightness(1.1) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(1.4) brightness(1.1) !important;
+  border-radius: 999px !important;
+  transition: all 0.2s ease !important;
+}
+
+site-search button:hover {
+  background: rgba(250,248,245,0.95) !important;
+  box-shadow: inset 0 2px 0 rgba(255,255,255,0.9), inset 0 -2px 0 rgba(0,0,0,0.08), 0 8px 32px rgba(0,0,0,0.12) !important;
+}
+
+/* Remove kbd background in search bar */
+site-search button kbd {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
 }
