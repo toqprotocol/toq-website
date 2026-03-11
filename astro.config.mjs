@@ -4,12 +4,19 @@ import starlight from '@astrojs/starlight';
 
 import react from '@astrojs/react';
 import tailwindcss from '@tailwindcss/vite';
+import toqTheme from './src/themes/toq-light.json';
 
 // https://astro.build/config
 export default defineConfig({
   integrations: [starlight({
 			title: 'toq protocol',
 			customCss: ['./src/styles/global.css'],
+			head: [
+				{ tag: 'link', attrs: { rel: 'preconnect', href: 'https://fonts.googleapis.com' } },
+				{ tag: 'link', attrs: { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: true } },
+				{ tag: 'link', attrs: { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=DM+Mono:wght@300;400;500&display=swap' } },
+			],
+			expressiveCode: { themes: [toqTheme], minSyntaxHighlightingColorContrast: 0 },
 			components: {
 				ThemeProvider: './src/components/ForceLightTheme.astro',
 				ThemeSelect: './src/components/EmptyComponent.astro',

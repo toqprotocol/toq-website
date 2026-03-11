@@ -1,5 +1,6 @@
 @import "tailwindcss";
 
+
 html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -43,6 +44,8 @@ html {
   --sl-color-accent-low: #fff3e0;
   --sl-color-accent: #E57C04;
   --sl-color-accent-high: #3d2200;
+  --sl-font: 'DM Sans', sans-serif;
+  --sl-font-system-mono: 'DM Mono', monospace;
   --sl-color-white: #1a1a1a;
   --sl-color-gray-1: #3d3d3d;
   --sl-color-gray-2: #5a5a5a;
@@ -61,6 +64,7 @@ html {
 .site-title {
   color: #E57C04 !important;
   font-family: 'Apple Garamond', 'Garamond', serif !important;
+  letter-spacing: -0.06em !important;
 }
 
 .social-icons::after {

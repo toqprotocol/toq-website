@@ -1,0 +1,22 @@
+{
+  "name": "toq-light",
+  "type": "light",
+  "colors": {
+    "editor.background": "#faf8f5",
+    "editor.foreground": "#4a4a4a"
+  },
+  "tokenColors": [
+    { "scope": "source", "settings": { "foreground": "#4a4a4a" } },
+    { "scope": "comment", "settings": { "foreground": "#b0a090", "fontStyle": "italic" } },
+    { "scope": "string", "settings": { "foreground": "#e57c04" } },
+    { "scope": "constant", "settings": { "foreground": "#4a4a4a" } },
+    { "scope": "keyword", "settings": { "foreground": "#6a6a6a" } },
+    { "scope": "storage", "settings": { "foreground": "#6a6a6a" } },
+    { "scope": "entity", "settings": { "foreground": "#2a2a2a" } },
+    { "scope": "variable", "settings": { "foreground": "#4a4a4a" } },
+    { "scope": "support", "settings": { "foreground": "#2a2a2a" } },
+    { "scope": "punctuation", "settings": { "foreground": "#6a6a6a" } },
+    { "scope": "meta", "settings": { "foreground": "#4a4a4a" } },
+    { "scope": "markup.heading", "settings": { "foreground": "#2a2a2a", "fontStyle": "bold" } }
+  ]
+}
