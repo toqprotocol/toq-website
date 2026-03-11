@@ -269,7 +269,7 @@ export default function Hero() {
 
       {/* Nav */}
       <nav className="relative z-20 flex items-center justify-between px-6 md:px-10 py-5">
-        <a href="/" className="text-white text-2xl font-light tracking-[-0.06em] whitespace-nowrap no-underline select-none">toq protocol</a>
+        <a href="/" className="text-white text-2xl font-light tracking-[-0.06em] w-40 whitespace-nowrap no-underline select-none">toq protocol</a>
 
         {/* Desktop nav */}
         <div className="hidden md:flex flex-1 justify-center">
