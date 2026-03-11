@@ -173,7 +173,7 @@ function MobileMenu() {
   const [open, setOpen] = React.useState(false)
 
   return (
-    <div className="md:hidden">
+    <div className="md:hidden relative">
       <button
         onClick={() => setOpen(!open)}
         className="text-white p-2"
@@ -212,31 +212,24 @@ function MobileMenu() {
 
       {open && (
         <motion.div
-          className="absolute top-full right-0 mt-1 rounded-2xl overflow-hidden"
+          className="absolute top-full right-3 mt-0"
           initial={{ opacity: 0, y: -8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.2 }}
         >
-          <div className="relative" style={{ backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)" }}>
-            <div className="absolute inset-0 rounded-2xl" style={{
-              background: "linear-gradient(160deg, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.12) 100%)",
-              border: "1px solid rgba(255,255,255,0.3)",
-              boxShadow: "0 4px 20px rgba(0,0,0,0.12)",
-            }} />
-            <div className="relative z-10 flex flex-col py-2">
-              {navItems.map((item, i) => (
-                <motion.a
-                  key={item.label}
-                  href={item.href}
-                  className="px-6 py-3 text-white/80 text-base font-light no-underline hover:text-white transition-colors"
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.2, delay: i * 0.05 }}
-                >
-                  {item.label}
-                </motion.a>
-              ))}
-            </div>
+          <div className="flex flex-col py-2">
+            {navItems.map((item, i) => (
+              <motion.a
+                key={item.label}
+                href={item.href}
+                className="py-2 text-white/80 text-base font-light no-underline hover:text-white transition-colors text-right"
+                initial={{ opacity: 0, x: 10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.2, delay: i * 0.05 }}
+              >
+                {item.label}
+              </motion.a>
+            ))}
           </div>
         </motion.div>
       )}
@@ -257,20 +250,20 @@ export default function Hero() {
         <motion.div
           className="absolute rounded-full"
           style={{ width: "60vw", height: "60vw", background: "radial-gradient(circle, rgba(246,62,2,0.3) 0%, transparent 70%)", filter: "blur(80px)", top: "-10%", left: "-10%" }}
-          animate={{ x: [0, 80, 0], y: [0, 60, 0] }}
-          transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
+          animate={{ x: [0, 120, -40, 80, 0], y: [0, 80, -30, 60, 0], scale: [1, 1.15, 0.95, 1.1, 1] }}
+          transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
         />
         <motion.div
           className="absolute rounded-full"
           style={{ width: "50vw", height: "50vw", background: "radial-gradient(circle, rgba(243,183,0,0.35) 0%, transparent 70%)", filter: "blur(80px)", top: "20%", right: "-15%" }}
-          animate={{ x: [0, -60, 0], y: [0, 80, 0] }}
-          transition={{ duration: 25, repeat: Infinity, ease: "easeInOut" }}
+          animate={{ x: [0, -100, 30, -60, 0], y: [0, 100, -50, 80, 0], scale: [1, 0.9, 1.2, 0.95, 1] }}
+          transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
         />
         <motion.div
           className="absolute rounded-full"
           style={{ width: "40vw", height: "40vw", background: "radial-gradient(circle, rgba(255,98,1,0.25) 0%, transparent 70%)", filter: "blur(80px)", bottom: "10%", left: "20%" }}
-          animate={{ x: [0, 50, 0], y: [0, -40, 0] }}
-          transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
+          animate={{ x: [0, 80, -60, 50, 0], y: [0, -70, 40, -40, 0], scale: [1, 1.2, 0.9, 1.1, 1] }}
+          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
         />
       </div>
 
@@ -325,8 +318,9 @@ export default function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.8 }}
         >
-          No central server, no vendor lock-in. Install in one command,
-          send your first message in under five minutes.
+          No central server. No vendor lock-in. No bullshit.
+          <br />
+          Install in one command, send your first message in under five minutes.
         </motion.p>
 
         <motion.div

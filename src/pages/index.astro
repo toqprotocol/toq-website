@@ -2,14 +2,14 @@
 import '../styles/global.css';
 import Hero from '../components/hero.tsx';
 ---
-<html lang="en">
+<html lang="en" style="overflow:hidden;height:100vh;">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>toq protocol - make your agents toq</title>
   <meta name="description" content="The open protocol for secure agent-to-agent communication" />
 </head>
-<body style="margin:0;padding:0;height:100vh;overflow:hidden;background:#000;">
+<body style="margin:0;padding:0;height:100vh;overflow:hidden;overscroll-behavior:none;background:#000;">
   <Hero client:load />
 </body>
 </html>
