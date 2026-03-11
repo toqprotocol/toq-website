@@ -156,6 +156,81 @@ function NavPill() {
   )
 }
 
+function MobileMenu() {
+  const [open, setOpen] = React.useState(false)
+
+  return (
+    <div className="md:hidden">
+      <button
+        onClick={() => setOpen(!open)}
+        className="text-white p-2"
+        aria-label="Menu"
+      >
+        <div className="flex flex-col justify-center items-center w-6 h-6 gap-[5px]">
+          <motion.div
+            className="w-[22px] h-[2px] bg-white rounded-full"
+            animate={{
+              y: open ? 7 : 0,
+              rotate: open ? 45 : 0,
+            }}
+            transition={{
+              y: { duration: 0.25, type: "spring", delay: open ? 0 : 0.15 },
+              rotate: { duration: 0.25, type: "spring", delay: open ? 0.15 : 0 },
+            }}
+          />
+          <motion.div
+            className="w-[22px] h-[2px] bg-white rounded-full"
+            animate={{ opacity: open ? 0 : 1 }}
+            transition={{ duration: 0.15 }}
+          />
+          <motion.div
+            className="w-[22px] h-[2px] bg-white rounded-full"
+            animate={{
+              y: open ? -7 : 0,
+              rotate: open ? -45 : 0,
+            }}
+            transition={{
+              y: { duration: 0.25, type: "spring", delay: open ? 0 : 0.15 },
+              rotate: { duration: 0.25, type: "spring", delay: open ? 0.15 : 0 },
+            }}
+          />
+        </div>
+      </button>
+
+      {open && (
+        <motion.div
+          className="absolute top-full right-4 mt-2 rounded-2xl overflow-hidden"
+          initial={{ opacity: 0, y: -8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.2 }}
+        >
+          <div className="relative" style={{ backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)" }}>
+            <div className="absolute inset-0 rounded-2xl" style={{
+              background: "linear-gradient(160deg, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.12) 100%)",
+              border: "1px solid rgba(255,255,255,0.3)",
+              boxShadow: "0 4px 20px rgba(0,0,0,0.12)",
+            }} />
+            <div className="relative z-10 flex flex-col py-2">
+              {navItems.map((item, i) => (
+                <motion.a
+                  key={item.label}
+                  href={item.href}
+                  className="px-6 py-3 text-white/80 text-base font-light no-underline hover:text-white transition-colors"
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.2, delay: i * 0.05 }}
+                >
+                  {item.label}
+                </motion.a>
+              ))}
+            </div>
+          </div>
+        </motion.div>
+      )}
+    </div>
+  )
+}
+
 export default function Hero() {
   return (
     <div className="relative w-full h-screen overflow-hidden flex flex-col select-none" style={{ fontFamily: font, background: "linear-gradient(180deg, #E57C04 0%, #FAA300 60%, #FFFFFF 100%)" }}>
@@ -187,18 +262,23 @@ export default function Hero() {
       </div>
 
       {/* Nav */}
-      <nav className="relative z-20 flex items-center px-10 py-5">
-        <a href="/" className="text-white text-2xl font-light tracking-[-0.06em] w-40 no-underline select-none">toq protocol</a>
-        <div className="flex-1 flex justify-center">
+      <nav className="relative z-20 flex items-center justify-between px-6 md:px-10 py-5">
+        <a href="/" className="text-white text-2xl font-light tracking-[-0.06em] whitespace-nowrap no-underline select-none">toq protocol</a>
+
+        {/* Desktop nav */}
+        <div className="hidden md:flex flex-1 justify-center">
           <NavPill />
         </div>
-        <div className="w-40 flex justify-end">
+        <div className="hidden md:flex w-40 justify-end">
           <GlassPill href="/getting-started/quickstart/" className="px-5 py-2.5 whitespace-nowrap">
             <span className="text-white text-base font-light flex items-center gap-2">
               Get Started <span className="text-sm">↗</span>
             </span>
           </GlassPill>
         </div>
+
+        {/* Mobile hamburger */}
+        <MobileMenu />
       </nav>
 
       {/* Center content */}
