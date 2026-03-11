@@ -9,6 +9,7 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineConfig({
   integrations: [starlight({
 			title: 'toq protocol',
+			customCss: ['./src/styles/global.css'],
 			social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/toqprotocol' }],
 			sidebar: [
           {

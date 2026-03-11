@@ -1,32 +1,51 @@
 @import "tailwindcss";
 
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
 @font-face {
   font-family: 'Apple Garamond';
-  src: url('/fonts/AppleGaramond-Light.ttf') format('truetype');
+  src: url('/fonts/AppleGaramond-Light.woff2') format('woff2');
   font-weight: 300;
   font-style: normal;
 }
 @font-face {
   font-family: 'Apple Garamond';
-  src: url('/fonts/AppleGaramond.ttf') format('truetype');
+  src: url('/fonts/AppleGaramond.woff2') format('woff2');
   font-weight: 400;
   font-style: normal;
 }
 @font-face {
   font-family: 'Apple Garamond';
-  src: url('/fonts/AppleGaramond-Bold.ttf') format('truetype');
+  src: url('/fonts/AppleGaramond-Bold.woff2') format('woff2');
   font-weight: 700;
   font-style: normal;
 }
 @font-face {
   font-family: 'Apple Garamond';
-  src: url('/fonts/AppleGaramond-Italic.ttf') format('truetype');
+  src: url('/fonts/AppleGaramond-Italic.woff2') format('woff2');
   font-weight: 400;
   font-style: italic;
 }
 @font-face {
   font-family: 'Apple Garamond';
-  src: url('/fonts/AppleGaramond-LightItalic.ttf') format('truetype');
+  src: url('/fonts/AppleGaramond-LightItalic.woff2') format('woff2');
   font-weight: 300;
   font-style: italic;
+}
+
+/* Starlight theme overrides */
+:root {
+  --sl-color-accent-low: #3d2200;
+  --sl-color-accent: #E57C04;
+  --sl-color-accent-high: #FAA300;
+  --sl-hue: 30;
+  --sl-color-white: #FFFFFF;
+}
+:root[data-theme='light'] {
+  --sl-color-accent-low: #fff3e0;
+  --sl-color-accent: #E57C04;
+  --sl-color-accent-high: #3d2200;
 }
