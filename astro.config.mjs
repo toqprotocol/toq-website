@@ -10,6 +10,10 @@ export default defineConfig({
   integrations: [starlight({
 			title: 'toq protocol',
 			customCss: ['./src/styles/global.css'],
+			components: {
+				ThemeProvider: './src/components/ForceLightTheme.astro',
+				ThemeSelect: './src/components/EmptyComponent.astro',
+			},
 			social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/toqprotocol' }],
 			sidebar: [
           {
