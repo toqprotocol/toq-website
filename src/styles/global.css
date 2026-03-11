@@ -109,3 +109,66 @@ site-search button kbd {
   border: none !important;
   box-shadow: none !important;
 }
+
+/* Glass code blocks */
+.expressive-code .frame {
+  background: rgba(250,248,245,0.6) !important;
+  border: 2px solid rgba(0,0,0,0.08) !important;
+  box-shadow: inset 0 2px 0 rgba(255,255,255,0.7), inset 0 -1px 0 rgba(0,0,0,0.03), 0 4px 20px rgba(0,0,0,0.06) !important;
+  backdrop-filter: blur(16px) saturate(1.3) brightness(1.05) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(1.3) brightness(1.05) !important;
+  border-radius: 16px !important;
+  overflow: hidden !important;
+  transition: all 0.2s ease !important;
+}
+
+.expressive-code .frame:hover {
+  box-shadow: inset 0 2px 0 rgba(255,255,255,0.8), inset 0 -1px 0 rgba(0,0,0,0.05), 0 6px 28px rgba(0,0,0,0.09) !important;
+}
+
+.expressive-code .frame .header {
+  background: rgba(250,248,245,0.9) !important;
+  border-bottom: 1px solid rgba(0,0,0,0.06) !important;
+  border-radius: 14px 14px 0 0 !important;
+}
+
+.expressive-code pre {
+  background: transparent !important;
+  border-radius: 0 0 14px 14px !important;
+}
+
+/* Orange copy feedback */
+.expressive-code .feedback {
+  background: #E57C04 !important;
+}
+.expressive-code .copy button[data-copied] .feedback {
+  background: #E57C04 !important;
+}
+.expressive-code .feedback::after {
+  border-left-color: #E57C04 !important;
+}
+.expressive-code .feedback::before {
+  border-left-color: #E57C04 !important;
+}
+
+/* Smaller search close button */
+site-search .dialog-frame button.close-menu {
+  transform: scale(0.7) !important;
+}
+
+/* Glass search modal input */
+site-search .dialog-frame input {
+  background: rgba(250,248,245,0.8) !important;
+  border: 2px solid rgba(0,0,0,0.1) !important;
+  box-shadow: inset 0 2px 0 rgba(255,255,255,0.8), inset 0 -2px 0 rgba(0,0,0,0.05), 0 4px 20px rgba(0,0,0,0.08) !important;
+  backdrop-filter: blur(20px) saturate(1.4) brightness(1.1) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(1.4) brightness(1.1) !important;
+  border-radius: 999px !important;
+  transition: all 0.2s ease !important;
+}
+
+site-search .dialog-frame input:focus {
+  background: rgba(250,248,245,0.95) !important;
+  box-shadow: inset 0 2px 0 rgba(255,255,255,0.9), inset 0 -2px 0 rgba(0,0,0,0.08), 0 8px 32px rgba(0,0,0,0.12) !important;
+  outline: none !important;
+}
