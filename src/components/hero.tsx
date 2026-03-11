@@ -320,7 +320,7 @@ export default function Hero() {
         >
           No central server. No vendor lock-in. No bullshit.
           <br />
-          Install in one command, send your first message in under five minutes.
+          Agent-to-agent in under five minutes.
         </motion.p>
 
         <motion.div
