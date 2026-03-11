@@ -290,7 +290,7 @@ export default function Hero() {
           className="mb-8"
         >
           <GlassPill className="px-5 py-2">
-            <span className="text-white/90 text-base font-light">Now in Alpha</span>
+            <span className="text-white/90 text-base font-normal">Now in Alpha!</span>
           </GlassPill>
         </motion.div>
 
