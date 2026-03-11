@@ -151,7 +151,7 @@ function NavPill() {
           key={item.label}
           ref={(el) => { refs.current[i] = el }}
           href={item.href}
-          className={`relative z-10 px-6 py-2.5 text-base font-light no-underline transition-colors duration-200 ${
+          className={`relative z-10 px-6 py-2.5 text-base font-normal no-underline transition-colors duration-200 ${
             active === i ? "text-white" : "text-white/70 hover:text-white"
           }`}
           onMouseEnter={() => setActive(i)}
@@ -216,7 +216,7 @@ function MobileMenu() {
               <motion.a
                 key={item.label}
                 href={item.href}
-                className="py-2 text-white/80 text-base font-light no-underline hover:text-white transition-colors text-right"
+                className="py-2 text-white/80 text-base font-normal no-underline hover:text-white transition-colors text-right"
                 initial={{ opacity: 0, x: 10 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.2, delay: i * 0.05 }}
@@ -263,7 +263,7 @@ export default function Hero() {
 
       {/* Nav */}
       <nav className="relative z-20 flex items-center justify-between px-6 md:px-10 py-5">
-        <a href="/" className="text-white text-2xl font-light tracking-[-0.06em] w-40 whitespace-nowrap no-underline select-none">toq protocol</a>
+        <a href="/" className="text-white text-2xl font-normal tracking-[-0.06em] w-40 whitespace-nowrap no-underline select-none">toq protocol</a>
 
         {/* Desktop nav */}
         <div className="hidden md:flex flex-1 justify-center">
@@ -271,7 +271,7 @@ export default function Hero() {
         </div>
         <div className="hidden md:flex w-40 justify-end">
           <GlassPill href="/getting-started/quickstart/" className="px-5 py-2.5 whitespace-nowrap">
-            <span className="text-white text-base font-light flex items-center gap-2">
+            <span className="text-white text-base font-normal flex items-center gap-2">
               Get Started <ArrowUpRight />
             </span>
           </GlassPill>
