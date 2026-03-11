@@ -302,7 +302,7 @@ export default function Hero() {
           transition={{ duration: 1, delay: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
         >
           <span className="block text-2xl md:text-3xl lg:text-4xl font-light italic text-white/70 -mb-12 md:-mb-16 lg:-mb-20 tracking-[-0.05em]">make your agents</span>
-          <span className="block text-[10rem] md:text-[14rem] lg:text-[18rem] font-light text-white leading-none tracking-[-0.06em]">toq</span>
+          <span className="block text-[12rem] md:text-[14rem] lg:text-[18rem] font-light text-white leading-none tracking-[-0.06em]">toq</span>
         </motion.h1>
 
         <motion.p
