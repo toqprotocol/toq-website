@@ -336,7 +336,7 @@ export default function Hero() {
 
       {/* Framework logos */}
       <motion.div
-        className="relative z-10 px-8 pb-10 flex flex-col items-center gap-4"
+        className="relative z-10 px-8 pb-10 -translate-y-6 flex flex-col items-center gap-4"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8, delay: 1.4 }}
