@@ -239,6 +239,9 @@ export default function Hero() {
       {/* Noise texture */}
       <div className="absolute inset-0 z-[1] opacity-50 pointer-events-none mix-blend-overlay" style={{ backgroundImage: "url('/noise.png')", backgroundRepeat: "repeat", backgroundSize: "256px 256px" }} />
 
+      {/* Curved white edges (desktop only) */}
+      <div className="absolute inset-0 z-[1] pointer-events-none" style={{ background: "radial-gradient(ellipse 70% 60% at 50% 40%, transparent 50%, rgba(255,255,255,0.15) 100%)" }} />
+
       {/* Gradient orbs */}
       <div className="absolute inset-0 z-[0] overflow-hidden pointer-events-none hidden md:block">
         <motion.div
