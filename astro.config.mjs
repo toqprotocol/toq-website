@@ -13,6 +13,8 @@ export default defineConfig({
 			customCss: ['./src/styles/global.css'],
 			head: [
 				{ tag: 'link', attrs: { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' } },
+				{ tag: 'link', attrs: { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico', sizes: '32x32' } },
+				{ tag: 'link', attrs: { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' } },
 				{ tag: 'link', attrs: { rel: 'preload', href: '/fonts/DMSans-latin.woff2', as: 'font', type: 'font/woff2', crossorigin: true } },
 				{ tag: 'link', attrs: { rel: 'preload', href: '/fonts/DMMono-Regular.woff2', as: 'font', type: 'font/woff2', crossorigin: true } },
 				{ tag: 'link', attrs: { rel: 'preload', href: '/fonts/AppleGaramond.woff2', as: 'font', type: 'font/woff2', crossorigin: true } },
