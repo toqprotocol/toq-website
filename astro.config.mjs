@@ -27,6 +27,7 @@ export default defineConfig({
               label: 'Getting Started',
               items: [
                   { label: 'Overview', slug: 'getting-started/overview' },
+                  { label: 'Alpha Notice', slug: 'getting-started/alpha-notice' },
                   { label: 'Quickstart', slug: 'getting-started/quickstart' },
                   { label: 'Concepts', slug: 'getting-started/concepts' },
               ],
