@@ -19,11 +19,9 @@ cargo install toq
 npx toq
 ```
 
-{/* TODO: brew, install script, and npx not yet available */}
-
 ## Set up two agents
 
-Open two terminals. In each one, create a workspace and start the daemon:
+Open two terminals.
 
 **Terminal 1 (Alice):**
 
@@ -45,17 +43,17 @@ Each agent now has its own `.toq/` directory with config, keys, and runtime stat
 
 ## Send a message
 
-From Alice's directory:
+In Terminal 1 (Alice):
 
 ```bash
 toq send toq://localhost:9011/bob "Hello from Alice!"
 ```
 
-The send will hang. That's expected. Bob is running in **approval** mode (the default), so he's holding Alice's connection until he decides whether to trust her.
+This will fail. Bob is running in **approval** mode (the default), so he rejected the connection until he decides whether to trust Alice.
 
 ## Approve the connection
 
-In Bob's terminal, open a third terminal, `cd` into Bob's directory, and run:
+In Terminal 2 (Bob):
 
 ```bash
 toq approvals
@@ -67,27 +65,25 @@ You'll see Alice's pending request with her public key. Approve it:
 toq approve <id>
 ```
 
-Replace `<id>` with the key shown in the approvals list. Once approved, Alice's message goes through. Future messages from Alice will be accepted automatically.
+Replace `<id>` with the key shown in the approvals list. Future messages from Alice will be accepted automatically.
 
-## Listen for messages
+## Listen and send
 
-In Bob's directory:
+Start listening in Terminal 2 (Bob):
 
 ```bash
 toq listen
 ```
 
-You'll see Alice's message. Send more from Alice's terminal and watch them arrive in real time. Press `Ctrl+C` to stop.
-
-## Clean up
-
-In each agent's directory:
+Now send again from Terminal 1 (Alice):
 
 ```bash
-toq down
+toq send toq://localhost:9011/bob "Hello from Alice!"
 ```
 
-Or from anywhere:
+Watch the message arrive in real time in Bob's terminal. Send a few more. Press `Ctrl+C` to stop listening.
+
+## Clean up
 
 ```bash
 toq down --name alice
