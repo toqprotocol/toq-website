@@ -1,0 +1,159 @@
+---
+title: Quickstart
+description: Install toq and send your first message in 5 minutes
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+## Install
+
+```bash
+brew install toq
+```
+
+Other options:
+
+```bash
+curl -sSf https://toq.dev/install.sh | sh
+cargo install toq
+npx toq
+```
+
+## Set up two agents
+
+Open two terminal windows side by side.
+
+**In Terminal 1**, set up Alice:
+
+```bash
+mkdir alice && cd alice
+toq init --name alice --port 9009
+toq up
+```
+
+`toq up` starts the daemon in the background. You'll see Alice's address and connection mode printed, then get your prompt back.
+
+**In Terminal 2**, set up Bob:
+
+```bash
+mkdir bob && cd bob
+toq init --name bob --port 9011
+toq up
+```
+
+Both agents are now running. Each has its own `.toq/` directory with config, keys, and runtime state. Keys are generated automatically on first start.
+
+## Send a message
+
+**In Terminal 1 (Alice)**, send a message to Bob:
+
+```bash
+toq send toq://localhost:9011/bob "Hey Bob, what's up?"
+```
+
+This will fail. Bob is running in **approval** mode (the default), so he holds messages from unknown agents until he decides whether to trust them.
+
+## Approve the connection
+
+**In Terminal 2 (Bob)**, check pending requests:
+
+```bash
+toq approvals
+```
+
+You'll see Alice's pending request. Approve it:
+
+```bash
+toq approve <id>
+```
+
+Replace `<id>` with the ID shown in the approvals list. Future messages from Alice will be accepted automatically.
+
+## Receive the message
+
+**In Terminal 2 (Bob)**, start listening for messages:
+
+```bash
+toq listen
+```
+
+This runs in the foreground and streams incoming messages to your terminal. Leave it running.
+
+**In Terminal 1 (Alice)**, send the message again:
+
+```bash
+toq send toq://localhost:9011/bob "Hey Bob, what's up?"
+```
+
+**In Terminal 2**, you'll see the message arrive in real time. But Bob can't reply. He's just listening. Let's fix that.
+
+Press `Ctrl+C` in Terminal 2 to stop listening.
+
+## Make Bob intelligent
+
+Add an LLM handler so Bob can think and reply on his own. Pick your provider:
+
+<Tabs>
+  <TabItem label="Claude (API Key Needed)">
+    **In Terminal 2 (Bob)**, set your API key and add the handler:
+
+    ```bash
+    export ANTHROPIC_API_KEY="your-key-here"
+    toq handler add chat --provider anthropic --model claude-sonnet-4-20250514
+    ```
+  </TabItem>
+  <TabItem label="GPT (API Key Needed)">
+    **In Terminal 2 (Bob)**, set your API key and add the handler:
+
+    ```bash
+    export OPENAI_API_KEY="your-key-here"
+    toq handler add chat --provider openai --model gpt-4o
+    ```
+  </TabItem>
+  <TabItem label="Ollama (No API Key Needed)">
+    No API key needed. Install [Ollama](https://ollama.com) and pull a model:
+
+    ```bash
+    ollama pull llama3.2
+    ```
+
+    **In Terminal 2 (Bob)**, add the handler:
+
+    ```bash
+    toq handler add chat --provider ollama --model llama3.2
+    ```
+  </TabItem>
+</Tabs>
+
+**In Terminal 2 (Bob)**, start listening again:
+
+```bash
+toq listen
+```
+
+Leave it running. **In Terminal 1 (Alice)**, send Bob a message:
+
+```bash
+toq send toq://localhost:9011/bob "Write me a haiku about secure communication"
+```
+
+**In Terminal 2**, watch Bob receive the message, think, and reply. Alice gets the response automatically. Send a few more messages from Terminal 1 and watch a real conversation unfold.
+
+## Clean up
+
+**In each terminal**, stop the agent:
+
+```bash
+toq down
+```
+
+## What just happened
+
+You set up two agents, connected them through a secure handshake, and gave one of them the ability to hold intelligent conversations. Any agent running toq can now reach Bob, subject to his connection policy.
+
+## Next steps
+
+- [Concepts](/docs/getting-started/concepts/) for addresses, security, and connection modes
+- [Conversational Handlers](/docs/guides/conversational-handlers/) to customize prompts, turn limits, and provider options
+- [Message Handlers](/docs/guides/message-handlers/) to run custom scripts on incoming messages
+- [SDK docs](/docs/sdks/python/) for using toq from Python, Node.js, or Go
