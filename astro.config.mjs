@@ -21,7 +21,6 @@ export default defineConfig({
 				{ tag: 'link', attrs: { rel: 'preload', href: '/fonts/DMSans-latin.woff2', as: 'font', type: 'font/woff2', crossorigin: true } },
 				{ tag: 'link', attrs: { rel: 'preload', href: '/fonts/DMMono-Regular.woff2', as: 'font', type: 'font/woff2', crossorigin: true } },
 				{ tag: 'link', attrs: { rel: 'preload', href: '/fonts/AppleGaramond.woff2', as: 'font', type: 'font/woff2', crossorigin: true } },
-				{ tag: 'script', content: 'var from=sessionStorage.getItem("toq-from");sessionStorage.setItem("toq-from","docs");if(from==="landing"){document.documentElement.style.opacity="0";setTimeout(()=>{document.documentElement.style.transition="opacity 0.4s ease-in-out";document.documentElement.style.opacity="1"},100)}addEventListener("DOMContentLoaded",()=>{var t=document.querySelector(".site-title");if(t){var a=t.closest("a");if(a)a.addEventListener("click",e=>{e.preventDefault();document.documentElement.style.transition="opacity 0.4s ease-in-out";document.documentElement.style.opacity="0";setTimeout(()=>{window.location.href="/"},400)})}})' },
 			],
 			expressiveCode: { themes: [toqTheme], minSyntaxHighlightingColorContrast: 0 },
 			components: {
