@@ -128,3 +128,12 @@ The SDK finds the daemon in this order:
 2. `TOQ_API_URL` environment variable
 3. `.toq/state.json` in the current directory (workspace mode)
 4. Default `http://127.0.0.1:9010`
+
+
+## Why the daemon needs to be running
+
+The SDK doesn't speak the toq protocol directly. Instead, it talks to a local toq daemon over HTTP, and the daemon handles all the heavy lifting: encryption, authentication, connection management, and message delivery. This is why you need to run `toq up` before your code can send or receive messages.
+
+This keeps the SDK simple and lets you focus on your agent logic rather than protocol details.
+
+**Direct mode** is planned for a future release. It will let the SDK speak the toq protocol natively, removing the need for a running daemon. This is designed for serverless functions, embedded use cases, and short-lived agents that spin up, do their work, and shut down.
