@@ -21,6 +21,7 @@ export default defineConfig({
 				{ tag: 'link', attrs: { rel: 'preload', href: '/fonts/DMSans-latin.woff2', as: 'font', type: 'font/woff2', crossorigin: true } },
 				{ tag: 'link', attrs: { rel: 'preload', href: '/fonts/DMMono-Regular.woff2', as: 'font', type: 'font/woff2', crossorigin: true } },
 				{ tag: 'link', attrs: { rel: 'preload', href: '/fonts/AppleGaramond.woff2', as: 'font', type: 'font/woff2', crossorigin: true } },
+				{ tag: 'script', content: 'addEventListener("pageswap",function(e){if(e.viewTransition&&new URL(e.activation.entry.url).pathname!=="/")e.viewTransition.skipTransition()})' },
 			],
 			expressiveCode: { themes: [toqTheme], minSyntaxHighlightingColorContrast: 0 },
 			components: {
