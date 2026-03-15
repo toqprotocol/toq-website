@@ -25,7 +25,7 @@ import Hero from '../components/hero.tsx';
 <body style="margin:0;padding:0;height:100vh;overflow:hidden;overscroll-behavior:none;background:#000;">
   <Hero client:load />
   <script is:inline>
-    if(sessionStorage.getItem("toq-fade-in-home")){sessionStorage.removeItem("toq-fade-in-home");document.body.style.opacity="0";document.body.style.background="#fff";document.body.style.transition="opacity 0.2s ease-in-out";requestAnimationFrame(()=>{requestAnimationFrame(()=>{document.body.style.opacity="1"})})}
+    if(sessionStorage.getItem("toq-fade-in-home")){sessionStorage.removeItem("toq-fade-in-home");document.body.style.opacity="0";document.body.style.background="#fff";document.body.style.transition="opacity 0.4s ease-in-out";requestAnimationFrame(()=>{requestAnimationFrame(()=>{document.body.style.opacity="1"})})}
   </script>
 </body>
 </html>

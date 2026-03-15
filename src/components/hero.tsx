@@ -241,7 +241,7 @@ export default function Hero() {
     if (!href || href.startsWith("http") || href === "/") return
     e.preventDefault()
     setFading(true)
-    setTimeout(() => { sessionStorage.setItem("toq-fade-in", "1"); window.location.href = href }, 200)
+    setTimeout(() => { sessionStorage.setItem("toq-fade-in", "1"); window.location.href = href }, 400)
   }, [])
 
   return (
@@ -255,7 +255,7 @@ export default function Hero() {
             className="absolute inset-0 z-[100] bg-white pointer-events-none"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.2, ease: "easeInOut" }}
+            transition={{ duration: 0.4, ease: "easeInOut" }}
           />
         )}
       </AnimatePresence>
@@ -313,7 +313,7 @@ export default function Hero() {
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           animate={fading ? { opacity: 0, y: 30 } : { opacity: 1, y: 0 }}
-          transition={fading ? { duration: 0.2 } : { duration: 0.8, delay: 0.2 }}
+          transition={fading ? { duration: 0.4 } : { duration: 0.8, delay: 0.2 }}
           className="mb-8"
         >
           <GlassPill className="px-5 py-2">
@@ -326,7 +326,7 @@ export default function Hero() {
           style={{ fontFamily: font, fontWeight: 300 }}
           initial={{ opacity: 0, y: 25 }}
           animate={fading ? { opacity: 0, y: 25 } : { opacity: 1, y: 0 }}
-          transition={fading ? { duration: 0.2 } : { duration: 1, delay: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
+          transition={fading ? { duration: 0.4 } : { duration: 1, delay: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
         >
           <span className="block text-2xl md:text-3xl lg:text-4xl font-light italic text-white/70 -mb-12 md:-mb-16 lg:-mb-20 tracking-[-0.05em]">make your agents</span>
           <span className="block text-[12rem] md:text-[14rem] lg:text-[18rem] font-light text-white leading-none tracking-[-0.06em]">toq</span>
@@ -337,7 +337,7 @@ export default function Hero() {
           style={{ fontFamily: font, fontWeight: 400 }}
           initial={{ opacity: 0, y: 15 }}
           animate={fading ? { opacity: 0, y: 30 } : { opacity: 1, y: 0 }}
-          transition={fading ? { duration: 0.2 } : { duration: 0.8, delay: 0.8 }}
+          transition={fading ? { duration: 0.4 } : { duration: 0.8, delay: 0.8 }}
         >
           No central server. No vendor lock-in. No bullshit.
           <br />
@@ -348,7 +348,7 @@ export default function Hero() {
           className="mt-5 flex items-center gap-5"
           initial={{ opacity: 0, y: 12 }}
           animate={fading ? { opacity: 0, y: 25 } : { opacity: 1, y: 0 }}
-          transition={fading ? { duration: 0.2 } : { duration: 0.8, delay: 1.1 }}
+          transition={fading ? { duration: 0.4 } : { duration: 0.8, delay: 1.1 }}
         >
           <GlassPill href="/getting-started/quickstart/" className="px-8 py-3">
             <span className="text-white text-base font-normal flex items-center gap-2">
@@ -363,7 +363,7 @@ export default function Hero() {
         className="relative z-10 px-8 pb-10 -translate-y-6 flex flex-col items-center gap-4"
         initial={{ opacity: 0 }}
         animate={fading ? { opacity: 0, y: 20 } : { opacity: 1, y: 0 }}
-        transition={fading ? { duration: 0.2 } : { duration: 0.8, delay: 1.4 }}
+        transition={fading ? { duration: 0.4 } : { duration: 0.8, delay: 1.4 }}
       >
         <span className="text-neutral-400 text-xs font-light tracking-widest uppercase">
           Works with your favorite frameworks
