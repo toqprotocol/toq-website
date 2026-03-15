@@ -299,12 +299,16 @@ li.pagefind-ui__result:hover {
   navigation: auto;
 }
 
+::view-transition-group(root) {
+  background: white;
+}
+
 ::view-transition-old(root) {
   animation: 0.4s ease-in-out both vt-fade-out;
 }
 
 ::view-transition-new(root) {
-  animation: 0.4s ease-in-out both vt-fade-in;
+  animation: 0.4s ease-in-out 0.4s both vt-fade-in;
 }
 
 @keyframes vt-fade-out {
@@ -313,4 +317,31 @@ li.pagefind-ui__result:hover {
 
 @keyframes vt-fade-in {
   from { opacity: 0; }
+}
+
+/* Hero elements slide down when leaving landing page */
+.hero-pill { view-transition-name: hero-pill; }
+.hero-heading { view-transition-name: hero-heading; }
+.hero-subtitle { view-transition-name: hero-subtitle; }
+.hero-cta { view-transition-name: hero-cta; }
+.hero-logos { view-transition-name: hero-logos; }
+
+::view-transition-old(hero-pill) {
+  animation: 0.3s ease-in-out both vt-slide-down;
+}
+::view-transition-old(hero-heading) {
+  animation: 0.3s ease-in-out 0.05s both vt-slide-down;
+}
+::view-transition-old(hero-subtitle) {
+  animation: 0.3s ease-in-out 0.1s both vt-slide-down;
+}
+::view-transition-old(hero-cta) {
+  animation: 0.3s ease-in-out 0.15s both vt-slide-down;
+}
+::view-transition-old(hero-logos) {
+  animation: 0.3s ease-in-out 0.2s both vt-slide-down;
+}
+
+@keyframes vt-slide-down {
+  to { opacity: 0; transform: translateY(25px); }
 }

@@ -290,7 +290,7 @@ export default function Hero() {
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="mb-8"
+          className="hero-pill mb-8"
         >
           <GlassPill className="px-5 py-2">
             <span className="text-white/90 text-base font-normal">Now in Alpha</span>
@@ -298,7 +298,7 @@ export default function Hero() {
         </motion.div>
 
         <motion.h1
-          className="text-center"
+          className="hero-heading text-center"
           style={{ fontFamily: font, fontWeight: 300 }}
           initial={{ opacity: 0, y: 25 }}
           animate={{ opacity: 1, y: 0 }}
@@ -309,7 +309,7 @@ export default function Hero() {
         </motion.h1>
 
         <motion.p
-          className="mt-8 text-lg md:text-xl text-white/60 text-center max-w-lg leading-relaxed"
+          className="hero-subtitle mt-8 text-lg md:text-xl text-white/60 text-center max-w-lg leading-relaxed"
           style={{ fontFamily: font, fontWeight: 400 }}
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
@@ -321,7 +321,7 @@ export default function Hero() {
         </motion.p>
 
         <motion.div
-          className="mt-5 flex items-center gap-5"
+          className="hero-cta mt-5 flex items-center gap-5"
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 1.1 }}
@@ -336,7 +336,7 @@ export default function Hero() {
 
       {/* Framework logos */}
       <motion.div
-        className="relative z-10 px-8 pb-10 -translate-y-6 flex flex-col items-center gap-4"
+        className="hero-logos relative z-10 px-8 pb-10 -translate-y-6 flex flex-col items-center gap-4"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 1.4 }}
