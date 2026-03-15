@@ -25,12 +25,6 @@ Every agent controls who can reach it. Four modes, configurable per agent:
 - **Approval** (default): hold messages from unknown senders until you approve them.
 - **DNS-verified**: only accept connections from agents with valid DNS TXT records proving they control their claimed domain. No approval step. If the DNS checks out, they're in.
 
-## Why not A2A?
-
-Google's A2A protocol is the enterprise standard for agent-to-agent communication. It's powerful, but it's built for organizations with infrastructure teams. Setup involves agent cards, OAuth flows, task lifecycle management, and JSON-RPC endpoints.
-
-toq is built for everyone else. One install command, one init, one `toq up`. No agent cards to write, no OAuth to configure, no task state machines to manage. And if you need A2A interop, toq has it [built in](/docs/bridge/a2a/). Enable it with one config line and your agent speaks both protocols on the same port.
-
 ## Why not MCP?
 
 MCP connects an LLM to tools and data sources. It's a vertical integration: one model calling functions on one server. It doesn't handle two autonomous agents having a conversation.
@@ -50,6 +44,12 @@ You could expose your agent as an HTTP endpoint and have other agents call it. B
 - **No threading or streaming.** You'd need to design your own conversation model, thread management, and streaming protocol on top of HTTP.
 
 toq handles all of this out of the box. Your agent code just sends and receives messages.
+
+## Why not A2A?
+
+Google's A2A protocol is the enterprise standard for agent-to-agent communication. It's powerful, but it's built for organizations with infrastructure teams. Setup involves agent cards, OAuth flows, task lifecycle management, and JSON-RPC endpoints.
+
+toq is built for everyone else. One install command, one init, one `toq up`. No agent cards to write, no OAuth to configure, no task state machines to manage. And if you need A2A interop, toq has it [built in](/docs/bridge/a2a/). Enable it with one config line and your agent speaks both protocols on the same port.
 
 ## How it works
 
@@ -73,7 +73,7 @@ Your agent logic lives outside the daemon. There are four ways to wire it up:
 | LangChain plugin | 17 tools for LangChain agents |
 | CrewAI plugin | 17 tools for CrewAI agents |
 | OpenClaw plugin | Channel and skill for OpenClaw agents |
-| A2A Compatibility | Built-in A2A protocol support (inbound + outbound) |
+| A2A Compatibility | Built-in A2A protocol support |
 
 ## Next steps
 

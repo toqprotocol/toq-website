@@ -353,3 +353,10 @@ li.pagefind-ui__result:hover {
 ::view-transition-new(hero-logos) {
   animation: 0.4s ease-in-out both vt-fade-in;
 }
+
+/* Admonition accent override: use site orange instead of default blue */
+.starlight-aside--note {
+  --sl-color-asides-text-accent: var(--sl-color-accent);
+  --sl-color-asides-border: var(--sl-color-accent);
+  background-color: #fde8cc;
+}
