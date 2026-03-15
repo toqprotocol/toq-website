@@ -25,8 +25,8 @@ import Hero from '../components/hero.tsx';
 <body style="margin:0;padding:0;height:100vh;overflow:hidden;overscroll-behavior:none;background:#000;">
   <Hero client:load />
   <script is:inline>
-    var from=sessionStorage.getItem("toq-from");sessionStorage.setItem("toq-from","landing");if(from==="docs"){document.body.style.opacity="0";document.body.style.background="#fff";document.body.style.transition="opacity 0.4s ease-in-out";setTimeout(()=>{document.body.style.opacity="1"},20)}
-    addEventListener("pagehide",()=>{document.body.style.transition="none";document.body.style.opacity="0"});addEventListener("pageshow",(e)=>{if(e.persisted){document.body.style.background="#fff";document.body.style.transition="opacity 0.4s ease-in-out";setTimeout(()=>{document.body.style.opacity="1"},20)}})
+    var from=sessionStorage.getItem("toq-from");sessionStorage.setItem("toq-from","landing");if(from==="docs"){document.body.style.opacity="0";document.body.style.background="#fff";setTimeout(()=>{document.body.style.transition="opacity 0.4s ease-in-out";document.body.style.opacity="1"},50)}
+    addEventListener("pagehide",()=>{document.body.style.transition="none";document.body.style.opacity="0"});addEventListener("pageshow",(e)=>{if(e.persisted){document.body.style.background="#fff";setTimeout(()=>{document.body.style.transition="opacity 0.4s ease-in-out";document.body.style.opacity="1"},50)}})
   </script>
 </body>
 </html>
