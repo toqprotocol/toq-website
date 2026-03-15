@@ -45,8 +45,15 @@ export default defineConfig({
                   { label: 'Connection Modes', slug: 'guides/connection-modes' },
                   { label: 'Conversational Handlers', slug: 'guides/conversational-handlers' },
                   { label: 'Message Handlers', slug: 'guides/message-handlers' },
-                  { label: 'Framework Integration', slug: 'guides/frameworks' },
                   { label: 'Remote Agents & DNS', slug: 'guides/remote' },
+              ],
+          },
+          {
+              label: 'Frameworks',
+              items: [
+                  { label: 'LangChain', slug: 'frameworks/langchain' },
+                  { label: 'CrewAI', slug: 'frameworks/crewai' },
+                  { label: 'OpenClaw', slug: 'frameworks/openclaw' },
               ],
           },
           {
