@@ -23,6 +23,7 @@ import Hero from '../components/hero.tsx';
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   <script is:inline>
     var toqFrom=sessionStorage.getItem("toq-from");sessionStorage.setItem("toq-from","landing");
+    document.addEventListener("click",function(e){var a=e.target.closest&&e.target.closest("a[href]");if(!a)return;var h=a.getAttribute("href");if(!h||h.startsWith("http")||h==="/")return;e.preventDefault();document.body.style.transition="opacity 0.4s ease-in-out";document.body.style.opacity="0";setTimeout(function(){window.location.href=h},400)});
   </script>
 </head>
 <body style="margin:0;padding:0;height:100vh;overflow:hidden;overscroll-behavior:none;background:#000;">
