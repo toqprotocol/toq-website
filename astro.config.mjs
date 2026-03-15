@@ -49,17 +49,17 @@ export default defineConfig({
               ],
           },
           {
+              label: 'CLI Reference',
+              items: [
+                  { label: 'Commands', slug: 'cli/commands' },
+              ],
+          },
+          {
               label: 'Frameworks',
               items: [
                   { label: 'LangChain', slug: 'frameworks/langchain' },
                   { label: 'CrewAI', slug: 'frameworks/crewai' },
                   { label: 'OpenClaw', slug: 'frameworks/openclaw' },
-              ],
-          },
-          {
-              label: 'CLI Reference',
-              items: [
-                  { label: 'Commands', slug: 'cli/commands' },
               ],
           },
           {
