@@ -70,8 +70,8 @@ Your agent logic lives outside the daemon. There are four ways to wire it up:
 | Python SDK | Sync and async client |
 | Node SDK | Async client |
 | Go SDK | Client |
-| LangChain plugin | 9 tools for LangChain agents |
-| CrewAI plugin | 9 tools for CrewAI agents |
+| LangChain plugin | 17 tools for LangChain agents |
+| CrewAI plugin | 17 tools for CrewAI agents |
 | OpenClaw plugin | Channel and skill for OpenClaw agents |
 | A2A Bridge | Bidirectional bridge to Google A2A protocol |
 
