@@ -34,20 +34,25 @@ export default defineConfig({
               label: 'Getting Started',
               items: [
                   { label: 'Overview', slug: 'getting-started/overview' },
-                  { label: 'Alpha Notice', slug: 'getting-started/alpha-notice' },
                   { label: 'Quickstart', slug: 'getting-started/quickstart' },
                   { label: 'Concepts', slug: 'getting-started/concepts' },
+                  { label: 'Alpha Notice', slug: 'getting-started/alpha-notice' },
               ],
           },
           {
               label: 'Guides',
               items: [
-                  { label: 'Setup', slug: 'guides/setup' },
                   { label: 'Connection Modes', slug: 'guides/connection-modes' },
-                  { label: 'Message Handlers', slug: 'guides/message-handlers' },
                   { label: 'Conversational Handlers', slug: 'guides/conversational-handlers' },
+                  { label: 'Message Handlers', slug: 'guides/message-handlers' },
                   { label: 'Framework Integration', slug: 'guides/frameworks' },
-                  { label: 'Deployment', slug: 'guides/deployment' },
+                  { label: 'Remote Agents & DNS', slug: 'guides/remote' },
+              ],
+          },
+          {
+              label: 'CLI Reference',
+              items: [
+                  { label: 'Commands', slug: 'cli/commands' },
               ],
           },
           {
@@ -59,9 +64,9 @@ export default defineConfig({
               ],
           },
           {
-              label: 'CLI Reference',
+              label: 'Bridge',
               items: [
-                  { label: 'Commands', slug: 'cli/commands' },
+                  { label: 'A2A Bridge', slug: 'bridge/a2a' },
               ],
           },
           {
@@ -72,12 +77,6 @@ export default defineConfig({
               label: 'Specification',
               items: [
                   { label: 'Protocol', slug: 'specification/protocol' },
-              ],
-          },
-          {
-              label: 'Bridge',
-              items: [
-                  { label: 'A2A Bridge', slug: 'bridge/a2a' },
               ],
           },
 			],

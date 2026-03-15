@@ -79,4 +79,4 @@ Your agent logic lives outside the daemon. There are four ways to wire it up:
 
 - [Quickstart](/docs/getting-started/quickstart/) to install and send your first message
 - [Concepts](/docs/getting-started/concepts/) to understand addresses, connections, and security
-- [Setup Guide](/docs/guides/setup/) for a full walkthrough
+- [Remote Agents & DNS](/docs/guides/remote/) for running agents on remote machines
