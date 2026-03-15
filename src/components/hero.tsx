@@ -355,15 +355,15 @@ export default function Hero() {
           Works with your favorite frameworks
         </span>
         <div className="flex items-center gap-12">
-          <div className="opacity-40 hover:opacity-70 grayscale hover:grayscale-0 transition-all duration-300">
+          <a href="/frameworks/langchain/" className="opacity-40 hover:opacity-70 grayscale hover:grayscale-0 transition-all duration-300">
             <img src="/logos/langchain.svg" alt="LangChain" className="h-10" />
-          </div>
-          <div className="opacity-40 hover:opacity-70 grayscale hover:grayscale-0 transition-all duration-300">
+          </a>
+          <a href="/frameworks/crewai/" className="opacity-40 hover:opacity-70 grayscale hover:grayscale-0 transition-all duration-300">
             <img src="/logos/crewai.svg" alt="CrewAI" className="h-10" />
-          </div>
-          <div className="opacity-40 hover:opacity-70 grayscale hover:grayscale-0 transition-all duration-300">
+          </a>
+          <a href="/frameworks/openclaw/" className="opacity-40 hover:opacity-70 grayscale hover:grayscale-0 transition-all duration-300">
             <img src="/logos/openclaw.svg" alt="OpenClaw" className="h-10" />
-          </div>
+          </a>
         </div>
       </motion.div>
     </div>
