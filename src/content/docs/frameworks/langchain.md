@@ -82,7 +82,7 @@ client = connect(
     agent_name="support-bot",      # Agent name (default: auto-generated)
     connection_mode="approval",     # open, allowlist, approval (default)
     adapter="http",                 # Adapter type
-    api_port=9010,                  # Custom API port
+    port=9009,                      # Custom port
 )
 ```
 

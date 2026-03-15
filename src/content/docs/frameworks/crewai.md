@@ -84,7 +84,7 @@ client = connect(
     agent_name="support-bot",
     connection_mode="approval",
     adapter="http",
-    api_port=9010,
+    port=9009,
 )
 ```
 

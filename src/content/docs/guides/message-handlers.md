@@ -27,13 +27,13 @@ When your handler runs, the daemon sets these environment variables so your scri
 | `TOQ_TYPE` | Message type (e.g. `message.send`, `thread.close`) |
 | `TOQ_ID` | Unique message ID |
 | `TOQ_HANDLER` | Name of the handler being run |
-| `TOQ_API_URL` | URL of the daemon's local API (for sending replies) |
+| `TOQ_URL` | URL of the daemon's local API (for sending replies) |
 
 The full message JSON is also piped to stdin if you need access to fields beyond what the environment variables cover.
 
 ## Sending replies
 
-If your handler wants to reply, it calls the daemon's local API. The `TOQ_API_URL` environment variable tells your script where to reach it.
+If your handler wants to reply, it calls the daemon's local API. The `TOQ_URL` environment variable tells your script where to reach it.
 
 Here's a simple Python handler that echoes the message back to the sender:
 
@@ -41,7 +41,7 @@ Here's a simple Python handler that echoes the message back to the sender:
 #!/usr/bin/env python3
 import os, requests
 
-requests.post(f"{os.environ['TOQ_API_URL']}/v1/messages?wait=true", json={
+requests.post(f"{os.environ['TOQ_URL']}/v1/messages?wait=true", json={
     "to": os.environ["TOQ_FROM"],
     "body": {"text": f"You said: {os.environ['TOQ_TEXT']}"},
     "thread_id": os.environ["TOQ_THREAD_ID"],

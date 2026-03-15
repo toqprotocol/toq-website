@@ -24,7 +24,7 @@ client := toq.Connect("")
 resp, err := client.Send("toq://example.com/agent", "hello", nil)
 ```
 
-The daemon needs to be running (`toq up`) before you connect. The SDK finds it automatically by checking the workspace state file, the `TOQ_API_URL` environment variable, or falling back to `http://127.0.0.1:9010`.
+The daemon needs to be running (`toq up`) before you connect. The SDK finds it automatically by checking the workspace state file, the `TOQ_URL` environment variable, or falling back to `http://127.0.0.1:9009`.
 
 ## Sending messages
 
@@ -136,9 +136,9 @@ client.ExportBackup("passphrase")               // Encrypted backup
 The SDK finds the daemon in this order:
 
 1. Explicit URL passed to `Connect("...")`
-2. `TOQ_API_URL` environment variable
+2. `TOQ_URL` environment variable
 3. `.toq/state.json` in the current directory (workspace mode)
-4. Default `http://127.0.0.1:9010`
+4. Default `http://127.0.0.1:9009`
 
 ## Helpers
 
