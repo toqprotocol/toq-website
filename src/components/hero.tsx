@@ -1,6 +1,6 @@
 "use client"
 import { motion } from "framer-motion"
-import React from "react"
+import React, { useState, useEffect } from "react"
 
 const ArrowUpRight = () => (
   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
@@ -232,6 +232,15 @@ function MobileMenu() {
 }
 
 export default function Hero() {
+  const [animKey, setAnimKey] = useState(0)
+
+  useEffect(() => {
+    const handler = (e: PageTransitionEvent) => {
+      if (e.persisted) setAnimKey(k => k + 1)
+    }
+    window.addEventListener("pageshow", handler)
+    return () => window.removeEventListener("pageshow", handler)
+  }, [])
   return (
     <div className="relative w-full h-screen overflow-hidden flex flex-col select-none" style={{ fontFamily: font, background: "linear-gradient(180deg, #E57C04 0%, #FAA300 60%, #FFFFFF 100%)" }}>
       <LiquidGlassFilters />
@@ -285,12 +294,12 @@ export default function Hero() {
       </nav>
 
       {/* Center content */}
-      <div className="flex-1 flex flex-col items-center justify-center z-10 px-4 -mt-8">
+      <div key={animKey} className="flex-1 flex flex-col items-center justify-center z-10 px-4 -mt-8">
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="hero-pill mb-8"
+          className="mb-8"
         >
           <GlassPill className="px-5 py-2">
             <span className="text-white/90 text-base font-normal">Now in Alpha</span>
@@ -298,7 +307,7 @@ export default function Hero() {
         </motion.div>
 
         <motion.h1
-          className="hero-heading text-center"
+          className="text-center"
           style={{ fontFamily: font, fontWeight: 300 }}
           initial={{ opacity: 0, y: 25 }}
           animate={{ opacity: 1, y: 0 }}
@@ -309,7 +318,7 @@ export default function Hero() {
         </motion.h1>
 
         <motion.p
-          className="hero-subtitle mt-8 text-lg md:text-xl text-white/60 text-center max-w-lg leading-relaxed"
+          className="mt-8 text-lg md:text-xl text-white/60 text-center max-w-lg leading-relaxed"
           style={{ fontFamily: font, fontWeight: 400 }}
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
@@ -321,7 +330,7 @@ export default function Hero() {
         </motion.p>
 
         <motion.div
-          className="hero-cta mt-5 flex items-center gap-5"
+          className="mt-5 flex items-center gap-5"
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 1.1 }}
@@ -336,7 +345,8 @@ export default function Hero() {
 
       {/* Framework logos */}
       <motion.div
-        className="hero-logos relative z-10 px-8 pb-10 -translate-y-6 flex flex-col items-center gap-4"
+        key={`logos-${animKey}`}
+        className="relative z-10 px-8 pb-10 -translate-y-6 flex flex-col items-center gap-4"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 1.4 }}
