@@ -79,6 +79,14 @@ curl -X POST http://127.0.0.1:9009/v1/messages \
   -d '{"to": "https://some-a2a-agent.example.com", "body": {"text": "Hello"}}'
 ```
 
+If the remote agent requires authentication, pass the token:
+
+```bash
+curl -X POST http://127.0.0.1:9009/v1/messages \
+  -H "Content-Type: application/json" \
+  -d '{"to": "https://some-a2a-agent.example.com", "body": {"text": "Hello"}, "a2a_auth": "their-token"}'
+```
+
 The daemon fetches the agent card from `/.well-known/agent-card.json` at that URL. If it finds one, it sends via A2A. If not, it tells you the target isn't an A2A agent. No guessing.
 
 ## Streaming
@@ -114,4 +122,4 @@ a2a_public_url = "https://my-agent.example.com/a2a"
 
 The A2A endpoint (`/a2a`) is accessible from any IP. Your local API (`/v1/*`) is not. These are on the same port but the daemon routes them to different handlers based on the source IP.
 
-Remote connections are rate-limited. Bearer token auth is constant-time compared to prevent timing attacks. Outbound A2A requests block cloud metadata and link-local addresses.
+Remote connections are rate-limited. Bearer token auth is constant-time comparison to prevent timing attacks. Outbound A2A requests block cloud metadata and link-local addresses.
