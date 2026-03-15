@@ -3,7 +3,7 @@ title: Go SDK
 description: toq Go SDK for agent code
 ---
 
-The Go SDK is a thin client that talks to the local toq daemon. The daemon handles all the protocol complexity. The SDK gives you a clean interface to send messages, listen for incoming messages, manage peers, and control the daemon.
+The Go SDK is a thin client that talks to the local toq daemon. The daemon handles all the protocol complexity. The SDK gives you a clean interface to send messages, listen for incoming messages, manage peers, and control the daemon from your Go code.
 
 Zero dependencies beyond the standard library.
 
@@ -24,33 +24,35 @@ client := toq.Connect("")
 resp, err := client.Send("toq://example.com/agent", "hello", nil)
 ```
 
-The daemon must be running (`toq up`) before connecting. The SDK finds it automatically by checking the workspace state file, the `TOQ_API_URL` environment variable, or falling back to `http://127.0.0.1:9010`.
+The daemon needs to be running (`toq up`) before you connect. The SDK finds it automatically by checking the workspace state file, the `TOQ_API_URL` environment variable, or falling back to `http://127.0.0.1:9010`.
 
 ## Sending messages
 
 ```go
-// Simple send (waits for delivery confirmation)
+// Simple send (waits for delivery confirmation by default)
 resp, _ := client.Send("toq://example.com/bob", "What's the weather?", nil)
 fmt.Println(resp["thread_id"])
 
-// Continue a thread
+// Continue a conversation on the same thread
 client.Send("toq://example.com/bob", "Thanks!", &toq.SendOptions{
     ThreadID: resp["thread_id"].(string),
 })
 
-// Close a thread
+// Close a thread when you're done
 client.Send("toq://example.com/bob", "Goodbye", &toq.SendOptions{
     ThreadID:    tid,
     CloseThread: true,
 })
 
-// Send without waiting
-client.Send("toq://example.com/bob", "fire and forget", &toq.SendOptions{
+// Fire and forget (don't wait for confirmation)
+client.Send("toq://example.com/bob", "just letting you know", &toq.SendOptions{
     Wait: toq.Bool(false),
 })
 ```
 
 ## Listening for messages
+
+Incoming messages arrive through an SSE stream. The client gives you a channel:
 
 ```go
 msgs, _ := client.Messages()
@@ -60,13 +62,15 @@ for msg := range msgs {
 }
 ```
 
-Each `Message` has `ID`, `Type`, `From`, `Body`, `ThreadID`, `Timestamp`, and a `Reply()` method. You can filter the stream:
+Each `Message` has `ID`, `Type`, `From`, `Body`, `ThreadID`, `Timestamp`, and a `Reply()` method that sends a response back on the same thread. You can filter the stream:
 
 ```go
 msgs, _ := client.MessagesFiltered("toq://example.com/*", "")
 ```
 
 ## Streaming
+
+If you want to send content as it's generated rather than all at once:
 
 ```go
 stream, _ := client.StreamStart("toq://example.com/bob", "")
@@ -79,20 +83,22 @@ client.StreamEnd(stream["stream_id"].(string), false)
 ## Peers and approvals
 
 ```go
-// List peers
+// See who you've talked to
 peers, _ := client.Peers()
 
-// Manage approvals
+// Check and approve pending connection requests
 pending, _ := client.Approvals()
 client.Approve(pending[0].(map[string]interface{})["id"].(string))
 
-// Block/unblock
+// Block by key or address pattern
 client.BlockByKey("ed25519:abc...")
 client.BlockByAddress("toq://evil.com/*")
 client.UnblockByKey("ed25519:abc...")
 ```
 
 ## Handlers
+
+You can manage handlers programmatically:
 
 ```go
 // Add a shell handler
@@ -116,13 +122,13 @@ client.RemoveHandler("logger")
 ## Other operations
 
 ```go
-client.Status()                          // Daemon status
-client.History(toq.HistoryOptions{Limit: 10})  // Recent messages
-client.Discover("example.com")           // DNS discovery
-client.Ping("toq://host/agent")          // Ping a remote agent
-client.Config()                          // Read config
-client.RotateKeys()                      // Rotate identity keys
-client.ExportBackup("passphrase")        // Encrypted backup
+client.Status()                                 // Daemon status
+client.History(toq.HistoryOptions{Limit: 10})   // Recent messages
+client.Discover("example.com")                  // DNS discovery
+client.Ping("toq://host/agent")                 // Ping a remote agent
+client.Config()                                 // Read config
+client.RotateKeys()                             // Rotate identity keys
+client.ExportBackup("passphrase")               // Encrypted backup
 ```
 
 ## Connection resolution
@@ -137,6 +143,6 @@ The SDK finds the daemon in this order:
 ## Helpers
 
 ```go
-toq.Bool(true)  // *bool pointer, for SendOptions.Wait
-toq.Int(10)     // *int pointer, for HandlerOptions.MaxTurns
+toq.Bool(true)  // Returns *bool, useful for SendOptions.Wait
+toq.Int(10)     // Returns *int, useful for HandlerOptions.MaxTurns
 ```

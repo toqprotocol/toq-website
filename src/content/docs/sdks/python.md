@@ -3,9 +3,9 @@ title: Python SDK
 description: toq Python SDK for sync and async agent code
 ---
 
-The Python SDK is a thin client that talks to the local toq daemon. The daemon handles all the protocol complexity (crypto, TLS, handshake, connections). The SDK gives you a clean interface to send messages, listen for incoming messages, manage peers, and control the daemon.
+The Python SDK is a thin client that talks to the local toq daemon. The daemon handles all the protocol complexity (crypto, TLS, handshake, connections). The SDK just gives you a clean way to send messages, listen for incoming messages, manage peers, and control the daemon from your Python code.
 
-Both sync and async clients are included. Use whichever fits your codebase.
+Both sync and async clients are included, so you can use whichever fits your codebase.
 
 ## Install
 
@@ -29,26 +29,28 @@ client = toq.connect_async()
 await client.send("toq://example.com/agent", "hello")
 ```
 
-The daemon must be running (`toq up`) before connecting. The SDK finds it automatically by checking the workspace state file, the `TOQ_API_URL` environment variable, or falling back to `http://127.0.0.1:9010`.
+The daemon needs to be running (`toq up`) before you connect. The SDK finds it automatically by checking the workspace state file, the `TOQ_API_URL` environment variable, or falling back to `http://127.0.0.1:9010`.
 
 ## Sending messages
 
 ```python
-# Simple send (waits for delivery confirmation)
+# Simple send (waits for delivery confirmation by default)
 resp = client.send("toq://example.com/bob", "What's the weather?")
 print(resp["thread_id"])
 
-# Continue a thread
+# Continue a conversation on the same thread
 client.send("toq://example.com/bob", "Thanks!", thread_id=resp["thread_id"])
 
-# Close a thread
+# Close a thread when you're done
 client.send("toq://example.com/bob", "Goodbye", thread_id=tid, close_thread=True)
 
-# Send without waiting
-client.send("toq://example.com/bob", "fire and forget", wait=False)
+# Fire and forget (don't wait for confirmation)
+client.send("toq://example.com/bob", "just letting you know", wait=False)
 ```
 
 ## Listening for messages (async)
+
+Incoming messages arrive asynchronously through an SSE stream. The async client gives you an iterator that yields messages as they come in:
 
 ```python
 client = toq.connect_async()
@@ -58,7 +60,7 @@ async for msg in client.messages():
     await msg.reply("Got it!")
 ```
 
-Each `Message` has `id`, `type`, `sender`, `body`, `thread_id`, `timestamp`, and a `reply()` method. You can filter the stream:
+Each `Message` has `id`, `type`, `sender`, `body`, `thread_id`, `timestamp`, and a `reply()` method that sends a response back on the same thread. You can filter the stream to only see messages from certain senders:
 
 ```python
 async for msg in client.messages(from_addr="toq://example.com/*"):
@@ -67,7 +69,7 @@ async for msg in client.messages(from_addr="toq://example.com/*"):
 
 ## Streaming
 
-Send content as a stream of chunks for real-time delivery:
+If you want to send content as it's generated rather than all at once, use the streaming API:
 
 ```python
 stream = client.stream_start("toq://example.com/bob")
@@ -77,24 +79,28 @@ client.stream_chunk(stream["stream_id"], "message.")
 client.stream_end(stream["stream_id"])
 ```
 
+The receiver sees each chunk as it arrives.
+
 ## Peers and approvals
 
 ```python
-# List peers
+# See who you've talked to
 for peer in client.peers():
     print(peer["address"], peer["status"])
 
-# Manage approvals
+# Check and approve pending connection requests
 for req in client.approvals():
     client.approve(req["id"])
 
-# Block/unblock
+# Block by key or address pattern
 client.block(key="ed25519:abc...")
 client.block(from_addr="toq://evil.com/*")
 client.unblock(key="ed25519:abc...")
 ```
 
 ## Handlers
+
+You can manage handlers programmatically, which is useful for setting up agents in code rather than through the CLI:
 
 ```python
 # Add a shell handler
@@ -117,7 +123,6 @@ client.discover("example.com")     # DNS discovery
 client.ping("toq://host/agent")   # Ping a remote agent
 client.config()                    # Read config
 client.update_config(log_level="debug")
-client.doctor()                    # Run diagnostics (async: diagnostics())
 client.rotate_keys()               # Rotate identity keys
 client.export_backup("passphrase") # Encrypted backup
 client.import_backup("passphrase", data)

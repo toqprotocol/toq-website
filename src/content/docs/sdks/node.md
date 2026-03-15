@@ -3,9 +3,9 @@ title: Node.js SDK
 description: toq Node.js SDK for async agent code
 ---
 
-The Node.js SDK is a thin client that talks to the local toq daemon. The daemon handles all the protocol complexity. The SDK gives you an async interface to send messages, listen for incoming messages, manage peers, and control the daemon.
+The Node.js SDK is a thin client that talks to the local toq daemon. The daemon handles all the protocol complexity. The SDK gives you an async interface to send messages, listen for incoming messages, manage peers, and control the daemon from your Node code.
 
-Zero runtime dependencies. Uses the built-in `fetch` API (Node 18+).
+Zero runtime dependencies. Uses the built-in `fetch` API.
 
 ## Install
 
@@ -24,23 +24,25 @@ const client = connect();
 await client.send("toq://example.com/agent", "hello");
 ```
 
-The daemon must be running (`toq up`) before connecting. The SDK finds it automatically by checking the workspace state file, the `TOQ_API_URL` environment variable, or falling back to `http://127.0.0.1:9010`.
+The daemon needs to be running (`toq up`) before you connect. The SDK finds it automatically by checking the workspace state file, the `TOQ_API_URL` environment variable, or falling back to `http://127.0.0.1:9010`.
 
 ## Sending messages
 
 ```typescript
-// Simple send (waits for delivery confirmation)
+// Simple send (waits for delivery confirmation by default)
 const resp = await client.send("toq://example.com/bob", "What's the weather?");
 console.log(resp.thread_id);
 
-// Continue a thread
+// Continue a conversation on the same thread
 await client.send("toq://example.com/bob", "Thanks!", { threadId: resp.thread_id });
 
-// Close a thread
+// Close a thread when you're done
 await client.send("toq://example.com/bob", "Goodbye", { threadId: tid, closeThread: true });
 ```
 
 ## Listening for messages
+
+Incoming messages arrive asynchronously through an SSE stream. The client gives you an async iterator:
 
 ```typescript
 const messages = await client.messages();
@@ -51,13 +53,15 @@ for await (const msg of messages) {
 }
 ```
 
-Each message has `id`, `type`, `from`, `body`, `threadId`, `timestamp`, and a `reply()` method. You can filter the stream:
+Each message has `id`, `type`, `from`, `body`, `threadId`, `timestamp`, and a `reply()` method that sends a response back on the same thread. You can filter the stream:
 
 ```typescript
 const messages = await client.messages({ from: "toq://example.com/*" });
 ```
 
 ## Streaming
+
+If you want to send content as it's generated rather than all at once:
 
 ```typescript
 const stream = await client.streamStart("toq://example.com/bob");
@@ -70,20 +74,22 @@ await client.streamEnd(stream.stream_id);
 ## Peers and approvals
 
 ```typescript
-// List peers
+// See who you've talked to
 const peers = await client.peers();
 
-// Manage approvals
+// Check and approve pending connection requests
 const pending = await client.approvals();
 await client.approve(pending[0].id);
 
-// Block/unblock
+// Block by key or address pattern
 await client.block({ key: "ed25519:abc..." });
 await client.block({ from: "toq://evil.com/*" });
 await client.unblock({ key: "ed25519:abc..." });
 ```
 
 ## Handlers
+
+You can manage handlers programmatically:
 
 ```typescript
 // Add a shell handler
