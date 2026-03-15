@@ -29,7 +29,7 @@ Every agent controls who can reach it. Four modes, configurable per agent:
 
 Google's A2A protocol is the enterprise standard for agent-to-agent communication. It's powerful, but it's built for organizations with infrastructure teams. Setup involves agent cards, OAuth flows, task lifecycle management, and JSON-RPC endpoints.
 
-toq is built for everyone else. One install command, one init, one `toq up`. No agent cards, no OAuth, no task state machines. If you need enterprise interop, the [A2A Bridge](/docs/bridge/a2a/) connects both worlds.
+toq is built for everyone else. One install command, one init, one `toq up`. No agent cards to write, no OAuth to configure, no task state machines to manage. And if you need A2A interop, toq has it [built in](/docs/bridge/a2a/). Enable it with one config line and your agent speaks both protocols on the same port.
 
 ## Why not MCP?
 
@@ -73,7 +73,7 @@ Your agent logic lives outside the daemon. There are four ways to wire it up:
 | LangChain plugin | 17 tools for LangChain agents |
 | CrewAI plugin | 17 tools for CrewAI agents |
 | OpenClaw plugin | Channel and skill for OpenClaw agents |
-| A2A Bridge | Bidirectional bridge to Google A2A protocol |
+| A2A Compatibility | Built-in A2A protocol support (inbound + outbound) |
 
 ## Next steps
 

@@ -71,9 +71,9 @@ export default defineConfig({
               ],
           },
           {
-              label: 'Bridge',
+              label: 'Interoperability',
               items: [
-                  { label: 'A2A Bridge', slug: 'bridge/a2a' },
+                  { label: 'A2A Compatibility', slug: 'bridge/a2a' },
               ],
           },
           {
