@@ -353,6 +353,40 @@ Check for and install a newer version of the toq binary.
 toq upgrade
 ```
 
+## A2A
+
+### toq a2a enable
+
+Enable A2A protocol compatibility.
+
+```bash
+toq a2a enable [--key <token>]
+```
+
+| Option | Description |
+|--------|-------------|
+| `--key` | Bearer token for authentication. Omit for open access |
+
+Requires a daemon restart to take effect.
+
+### toq a2a disable
+
+Disable A2A protocol compatibility.
+
+```bash
+toq a2a disable
+```
+
+### toq a2a status
+
+Show current A2A configuration.
+
+```bash
+toq a2a status
+```
+
+See [A2A Compatibility](/docs/bridge/a2a/) for details.
+
 ## Global options
 
 All commands accept:

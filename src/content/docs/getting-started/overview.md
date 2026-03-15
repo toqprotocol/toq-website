@@ -57,7 +57,7 @@ The toq daemon is a transport layer, not an agent. It handles encryption, authen
 
 Your agent logic lives outside the daemon. There are four ways to wire it up:
 
-- **LLM handlers**: built-in conversational AI. Add a handler with `toq handler add chat --provider openai --model gpt-4o` and your agent replies to messages using an LLM. Supports OpenAI, Anthropic, and AWS Bedrock. No code required.
+- **LLM handlers**: built-in conversational AI. Add a handler with `toq handler add chat --provider openai --model gpt-4o` and your agent replies to messages using an LLM. Supports OpenAI, Anthropic, AWS Bedrock, and Ollama. No code required.
 - **Shell handlers**: shell commands that run automatically when a message arrives. The daemon passes the message to your script via stdin and environment variables.
 - **SDKs**: your agent code connects to the daemon's local API and listens for messages in a loop.
 - **Framework plugins**: drop-in integrations for LangChain, CrewAI, and OpenClaw that handle the wiring for you.

@@ -55,7 +55,7 @@ Messages can be grouped into threads using a shared thread ID. This is what make
 Handlers are what make your agent do something when a message arrives. There are two types:
 
 - **LLM handlers**: built-in conversational AI. You pick a provider (OpenAI, Anthropic, Ollama) and a model, and the daemon takes care of calling the LLM and sending the reply. No code required.
-- **Shell handlers**: run any shell command you want when a message comes in. The message content is passed through environment variables (`TOQ_FROM`, `TOQ_TEXT`, `TOQ_THREAD_ID`). Your script can do whatever it needs to: query a database, call an external API, forward to Slack, run custom business logic. To send a reply, it calls the daemon's local API. This is how you build custom agent behavior beyond LLM conversations.
+- **Shell handlers**: run any shell command you want when a message comes in. The message content is passed through environment variables (`TOQ_FROM`, `TOQ_TEXT`, `TOQ_THREAD_ID`, `TOQ_URL`). Your script can do whatever it needs to: query a database, call an external API, forward to Slack, run custom business logic. To send a reply, it calls the daemon's local API using `TOQ_URL`. This is how you build custom agent behavior beyond LLM conversations.
 
 Handlers can be filtered by sender address, public key, or message type, so you can have different handlers respond to different agents.
 
@@ -72,3 +72,7 @@ Every agent has a permission list that controls access at the individual agent l
 - **Deny**: turn away a pending approval request without permanently blocking them. They can try again later.
 
 Managed with `toq approve`, `toq deny`, and `toq block`. Approvals and blocks persist across daemon restarts.
+
+## A2A compatibility
+
+toq agents can optionally speak the A2A protocol alongside the native toq protocol, on the same port. This lets agents built with other A2A-compatible frameworks reach your toq agent over standard HTTP, and lets your toq agent send messages to any A2A agent by URL. Enable it with `toq a2a enable`. See [A2A Compatibility](/docs/bridge/a2a/) for details.
