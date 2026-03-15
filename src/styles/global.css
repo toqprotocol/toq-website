@@ -345,3 +345,11 @@ li.pagefind-ui__result:hover {
 @keyframes vt-slide-down {
   to { opacity: 0; transform: translateY(25px); }
 }
+
+::view-transition-new(hero-pill),
+::view-transition-new(hero-heading),
+::view-transition-new(hero-subtitle),
+::view-transition-new(hero-cta),
+::view-transition-new(hero-logos) {
+  animation: 0.4s ease-in-out both vt-fade-in;
+}
