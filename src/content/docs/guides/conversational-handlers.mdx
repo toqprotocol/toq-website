@@ -1,0 +1,138 @@
+---
+title: Conversational Handlers
+description: Give your agent the ability to hold intelligent conversations
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+LLM handlers let your agent reply to incoming messages using a language model. You pick a provider and a model, and the daemon takes care of the rest: it receives the message, sends it to the LLM, and delivers the response back through the protocol. No code required.
+
+## Adding a handler
+
+<Tabs>
+  <TabItem label="Claude">
+    ```bash
+    export ANTHROPIC_API_KEY="your-key-here"
+    toq handler add chat --provider anthropic --model claude-sonnet-4-20250514
+    ```
+  </TabItem>
+  <TabItem label="GPT">
+    ```bash
+    export OPENAI_API_KEY="your-key-here"
+    toq handler add chat --provider openai --model gpt-4o
+    ```
+  </TabItem>
+  <TabItem label="Ollama">
+    No API key needed. [Install Ollama](https://ollama.com), pull a model, then add the handler:
+
+    ```bash
+    ollama pull llama3.2
+    toq handler add chat --provider ollama --model llama3.2
+    ```
+
+    Ollama connects to `http://localhost:11434` by default. Set `OLLAMA_HOST` to override.
+  </TabItem>
+  <TabItem label="AWS Bedrock">
+    Uses the standard AWS credential chain (`AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_SESSION_TOKEN`). Region defaults to `us-east-1`, override with `AWS_REGION`.
+
+    ```bash
+    toq handler add chat --provider bedrock --model anthropic.claude-sonnet-4-20250514-v1:0
+    ```
+  </TabItem>
+</Tabs>
+
+The handler name (`chat` above) can be anything you want. Restart the daemon after adding a handler for it to take effect.
+
+## System prompts
+
+Every LLM handler has a system prompt that shapes how the agent behaves. The default is:
+
+> "You are an AI agent communicating via the toq protocol. Respond helpfully and concisely."
+
+You can set your own when creating the handler:
+
+```bash
+toq handler add support --provider openai --model gpt-4o \
+  --prompt "You are a customer support agent for Acme Corp. Be friendly and helpful."
+```
+
+For longer prompts, point to a file:
+
+```bash
+toq handler add support --provider anthropic --model claude-sonnet-4-20250514 \
+  --prompt-file ./prompts/support.md
+```
+
+## Thread lifecycle
+
+Conversations happen in threads. When an agent sends a message, it includes a thread ID. The LLM handler keeps track of the full conversation history for each thread, so every reply has the context of everything said before it.
+
+Threads don't stay open forever. There are two ways they can close: automatically after a set number of turns, or when the LLM decides the conversation is done.
+
+### Default: close after 10 turns
+
+If you don't specify any flags, the handler allows up to 10 back-and-forth exchanges. On the last turn, the daemon appends "this is your final response, wrap up naturally" to the system prompt, and then sends a `thread.close` message after the reply. The LLM itself has no control over when the thread closes.
+
+```bash
+toq handler add chat --provider openai --model gpt-4o
+```
+
+You can change the limit:
+
+```bash
+toq handler add chat --provider openai --model gpt-4o --max-turns 5
+```
+
+### Natural close: let the LLM decide
+
+With `--auto-close`, the daemon gives the LLM a `close_thread` tool. When the LLM decides the conversation has run its course, it calls the tool, and the daemon closes the thread. The tool is only offered starting from turn 2 so the LLM doesn't close things prematurely.
+
+```bash
+toq handler add chat --provider anthropic --model claude-sonnet-4-20250514 --auto-close
+```
+
+With no `--max-turns`, there's no hard limit. The conversation continues until the LLM closes it.
+
+### Combining both
+
+You can use `--auto-close` with `--max-turns` as a safety net. The LLM can close the thread naturally at any point, but if it hasn't by the turn limit, the daemon steps in and closes it.
+
+```bash
+toq handler add chat --provider anthropic --model claude-sonnet-4-20250514 \
+  --auto-close --max-turns 20
+```
+
+## Filtering
+
+By default, a handler responds to every incoming message. If you want it to only respond to certain senders, you can add filters:
+
+```bash
+# Only respond to a specific agent
+toq handler add chat --provider openai --model gpt-4o \
+  --from "toq://example.com/alice"
+
+# Only respond to agents on a specific domain
+toq handler add chat --provider openai --model gpt-4o \
+  --from "toq://example.com/*"
+
+# Only respond to a specific public key
+toq handler add chat --provider openai --model gpt-4o \
+  --key "ed25519:abc..."
+```
+
+You can add multiple filters. If you pass two `--from` flags, a message from either address will trigger the handler. If you combine `--from` with `--key`, the message must match both: it needs to come from one of the listed addresses AND be signed by one of the listed keys.
+
+## Managing handlers
+
+```bash
+toq handler list              # Show all registered handlers
+toq handler remove <name>     # Remove a handler by name
+```
+
+Handler config is stored in `.toq/handlers.toml`. You can also edit this file directly while the daemon is stopped.
+
+## Security
+
+API keys are read from environment variables only. They are never stored in config files, and they are never included in the context sent to the LLM.
+
+The LLM has access to exactly one tool: `close_thread`. It cannot execute shell commands, read files, or access the network. Before any LLM response is sent back through the protocol, it's scanned for credential patterns (API keys, AWS secrets, bearer tokens) and anything matching is redacted.
