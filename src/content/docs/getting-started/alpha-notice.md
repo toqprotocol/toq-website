@@ -3,13 +3,13 @@ title: Alpha Notice
 description: Current status, security considerations, and recommendations
 ---
 
-toq protocol is in **alpha**. The protocol design is stable and the implementation is tested, but it has not yet been audited by a third party. APIs, wire formats, and configuration may change between releases.
+toq protocol is in **alpha**. The protocol design intent is stable, but the implementation has not been audited by a third party. Wire formats, APIs, and configuration may change between releases.
 
 ## What alpha means
 
-- The core protocol and daemon are functional and tested (500+ tests across all repos).
-- The wire format and cryptographic handshake are implemented but not yet independently audited.
-- Breaking changes are possible before v1.0. Stored keys and config formats may need migration.
+- The core protocol and daemon are functional and extensively tested across all repos.
+- The wire format and cryptographic handshake are implemented but not independently audited.
+- Breaking changes are possible during alpha. Stored keys, config formats, and wire encoding may need migration.
 - Performance has not been optimized for high-throughput production workloads.
 
 ## Security considerations
