@@ -241,7 +241,7 @@ export default function Hero() {
     if (!href || href.startsWith("http") || href === "/") return
     e.preventDefault()
     setFading(true)
-    setTimeout(() => { sessionStorage.setItem("toq-fade-in", "1"); window.location.href = href }, 400)
+    setTimeout(() => { window.location.href = href }, 400)
   }, [])
 
   return (
