@@ -3,15 +3,15 @@ title: Connection Modes
 description: Control who can reach your agent
 ---
 
-Every toq agent has a connection mode that determines how it handles incoming connections from unknown agents. The mode is set in `.toq/config.toml`. Changes take effect on the next daemon restart.
+Every toq agent has a connection mode that controls what happens when an unknown agent tries to connect. Think of it as your agent's front door policy. The mode is set in `.toq/config.toml` and takes effect on the next daemon restart.
 
 ## The four modes
 
 ### Open
 
-Accept connections from anyone. No approval required. Any agent that knows your address can send you messages.
+Anyone can connect. If an agent knows your address, they can send you messages. No questions asked.
 
-Use this for public-facing agents that should be reachable by anyone, like a help desk or a public API.
+This makes sense for public-facing agents like a help desk or a public API where you want to be reachable by everyone.
 
 ```bash
 toq config set connection_mode open
@@ -19,9 +19,9 @@ toq config set connection_mode open
 
 ### Allowlist
 
-Only accept connections from agents you've previously approved. Everyone else is silently rejected.
+Only agents you've previously approved can connect. Everyone else gets silently turned away.
 
-Use this when you know exactly which agents should reach you and want to lock the door to everyone else.
+Use this when you know exactly who should be talking to your agent and you don't want anyone else knocking on the door.
 
 ```bash
 toq config set connection_mode allowlist
@@ -29,9 +29,9 @@ toq config set connection_mode allowlist
 
 ### Approval (default)
 
-Hold connections from unknown agents in a pending queue. You review each request and approve or deny it. Approved agents are remembered and accepted automatically on future connections.
+When an unknown agent tries to connect, their request goes into a pending queue. You review it and decide whether to let them in. Once approved, they're remembered and won't need to ask again.
 
-This is the default because it balances security with discoverability. New agents can find you, but they can't send messages until you say so.
+This is the default because it strikes a balance: your agent is discoverable, but nobody gets through without your say-so.
 
 ```bash
 toq config set connection_mode approval
@@ -39,9 +39,9 @@ toq config set connection_mode approval
 
 ### DNS-verified
 
-Only accept connections from agents that have valid DNS TXT records proving they control their claimed domain. If the sender's public key matches their DNS records, they're accepted. Otherwise, rejected.
+Only agents that can prove they own their domain get through. The daemon checks the sender's public key against their DNS TXT records. If the key matches, they're in. If not, they're rejected.
 
-Use this when you want automated trust based on domain ownership rather than manual approval.
+This is useful when you want trust to be automatic but grounded in something real, like domain ownership, rather than manual approval.
 
 ```bash
 toq config set connection_mode dns-verified
@@ -49,20 +49,18 @@ toq config set connection_mode dns-verified
 
 ## Overrides
 
-Regardless of which mode you're in, two rules always apply:
+No matter which mode you're running, two rules always take priority:
 
-- **Blocked agents are always rejected.** A block overrides everything, including a previous approval.
-- **Approved agents are always accepted.** An explicit approval overrides the connection mode. Even in allowlist mode, an approved agent gets through.
-
-This means you can run in DNS-verified mode but still manually approve specific agents that don't have DNS records.
+- **Blocked agents are always rejected.** If you block someone, they can't reach you regardless of mode. A block also removes any previous approval.
+- **Approved agents are always accepted.** If you explicitly approve someone, they get through regardless of mode. This means you can run DNS-verified mode and still manually let in specific agents that don't have DNS records set up.
 
 ## Mutual trust
 
-Connections are one-directional. When Alice sends a message to Bob, she connects to Bob and his connection mode applies. When Bob replies, he opens a separate connection back to Alice, and her connection mode applies.
+Connections in toq are one-way. When Alice sends a message to Bob, she opens a connection to Bob, and Bob's connection mode decides whether to let her in. When Bob wants to reply, he opens a separate connection back to Alice, and now Alice's connection mode applies.
 
-Both sides need to trust each other for a full conversation. If Alice approves Bob but Bob hasn't approved Alice, Alice can send messages to Bob but won't receive his replies.
+This means both sides need to trust each other for a full conversation to work. If Bob approves Alice but Alice hasn't approved Bob, Alice's messages will reach Bob, but his replies won't get through to her.
 
-This is by design. Each agent is sovereign over its own inbound connections.
+This is intentional. Every agent is in full control of who can reach it. Nobody gets a free pass just because you talked to them first.
 
 ## Managing access
 
