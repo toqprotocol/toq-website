@@ -21,6 +21,7 @@ export default defineConfig({
 				{ tag: 'link', attrs: { rel: 'preload', href: '/fonts/DMSans-latin.woff2', as: 'font', type: 'font/woff2', crossorigin: true } },
 				{ tag: 'link', attrs: { rel: 'preload', href: '/fonts/DMMono-Regular.woff2', as: 'font', type: 'font/woff2', crossorigin: true } },
 				{ tag: 'link', attrs: { rel: 'preload', href: '/fonts/AppleGaramond.woff2', as: 'font', type: 'font/woff2', crossorigin: true } },
+				{ tag: 'script', content: 'if(sessionStorage.getItem("toq-fade-in")){sessionStorage.removeItem("toq-fade-in");document.documentElement.style.opacity="0";document.documentElement.style.transition="opacity 0.2s ease-in-out";addEventListener("DOMContentLoaded",()=>{document.documentElement.style.opacity="1"})}addEventListener("DOMContentLoaded",()=>{var t=document.querySelector(".site-title");if(t){var a=t.closest("a");if(a)a.addEventListener("click",e=>{e.preventDefault();sessionStorage.setItem("toq-fade-in-home","1");document.documentElement.style.transition="opacity 0.2s ease-in-out";document.documentElement.style.opacity="0";setTimeout(()=>{window.location.href="/"},200)})}})' },
 			],
 			expressiveCode: { themes: [toqTheme], minSyntaxHighlightingColorContrast: 0 },
 			components: {
