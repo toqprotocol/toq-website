@@ -19,7 +19,7 @@ toq init [--name <name>] [--host <host>] [--port <port>]
 | `--host` | `localhost` | Host for this agent's address (domain or IP) |
 | `--port` | `auto` | Port to listen on. Use `auto` for automatic assignment |
 
-Creates a `.toq/` directory with config and handler files. Keys are generated on first `toq up`.
+Creates a `.toq/` directory with config, handler, and permission files. Keys are generated on first `toq up`.
 
 ### toq setup
 
@@ -62,8 +62,10 @@ toq down [--graceful] [--name <name>]
 
 | Option | Description |
 |--------|-------------|
-| `--graceful` | Wait for active threads to finish before stopping |
+| `--graceful` | Defined for planned shutdowns but currently behaves the same as `toq down` |
 | `--name` | Stop a specific named agent from any directory |
+
+Persists policy state (approved, blocked, pending rules) and peer metadata before exiting.
 
 ### toq status
 
@@ -321,7 +323,7 @@ toq clear-logs
 
 ### toq export
 
-Create an encrypted backup of keys, config, and peer list.
+Create an encrypted backup of keys, config, and peer list. Encrypted with AES-256-GCM, key derived via Argon2id from a user-provided passphrase.
 
 ```bash
 toq export <path>
@@ -329,7 +331,7 @@ toq export <path>
 
 ### toq import
 
-Restore from an encrypted backup file.
+Restore from an encrypted backup file. Supports both current (Argon2id) and legacy (SHA-256) backups.
 
 ```bash
 toq import <path>
