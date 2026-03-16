@@ -3,7 +3,7 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
-    "sync-spec": "cp toq-spec/v0.1/protocol.md src/content/docs/specification/protocol.md",
+    "sync-spec": "mkdir -p src/content/docs/specification && cp toq-spec/v0.1/protocol.md src/content/docs/specification/protocol.md",
     "dev": "npm run sync-spec && astro dev",
     "start": "npm run sync-spec && astro dev",
     "build": "npm run sync-spec && astro build",
