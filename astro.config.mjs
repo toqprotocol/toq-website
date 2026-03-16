@@ -18,6 +18,7 @@ export default defineConfig({
   },
   integrations: [starlight({
 			title: 'toq protocol',
+			routeMiddleware: './src/routeData.ts',
 			customCss: ['./src/styles/global.css'],
 			head: [
 				{ tag: 'link', attrs: { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' } },
