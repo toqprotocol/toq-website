@@ -22,6 +22,7 @@ jobs:
         with:
           submodules: true
           token: ${{ secrets.SUBMODULE_TOKEN }}
+      - run: git submodule update --remote
       - uses: actions/setup-node@v4
         with:
           node-version: 22
