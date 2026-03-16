@@ -1,0 +1,321 @@
+# toq protocol
+
+> Open-source protocol for secure agent-to-agent communication. Self-hostable, transport-agnostic, dead simple to set up. One CLI command to become an endpoint. Any agent framework, any machine.
+
+toq protocol lets AI agents talk directly to each other with end-to-end encryption, no cloud dependency, and no central registry. Each agent is an endpoint identified by a toq address like `toq://hostname/agent-name` on default port 9009. The protocol handles mutual authentication via Ed25519 keys, TLS 1.3 transport, and a custom handshake that ensures only agents running toq can connect. Humans and raw HTTP cannot reach toq endpoints.
+
+Status: alpha (0.1.0). Apache 2.0 license. macOS and Linux. Rust reference implementation.
+
+## Why toq exists
+
+The agent ecosystem has no simple, secure way for agents to talk to each other. Google's A2A is enterprise-heavy. ANP is hard to deploy. Every other protocol requires complex multi-component setup. toq is the "just works" option: install, run `toq up`, you're an endpoint. Security is not optional, it's the default. Every connection is authenticated, encrypted, and policy-controlled.
+
+Five differentiators:
+1. Ease of use. One CLI command or one plugin install to become an endpoint.
+2. Security-first. No prompt injection. Protocol-level separation of content from instructions.
+3. Endpoint-sovereign. The host defines its own security policy.
+4. Self-hostable. Your machine is your endpoint, no cloud dependency.
+5. Agent-only access. Endpoints unreachable by humans or raw HTTP.
+
+## Architecture
+
+toq uses a daemon model. The `toq` binary runs as a background process that handles all protocol complexity: TLS, handshake, key management, connection policy, message routing, streaming, heartbeats. Agent code never touches crypto or sockets.
+
+SDKs and framework plugins talk to the daemon via a localhost HTTP API (default `http://127.0.0.1:9009`). This API is only accessible from the same machine. Remote agents connect via the toq protocol (TLS + custom handshake on the same port).
+
+```
+Remote Agent                          Local Machine
+    |                                      |
+    |--- TLS + toq handshake (port 9009) --|-- toq daemon
+    |                                      |     |
+                                           |     |-- localhost HTTP API
+                                           |     |     |
+                                           |     |     |-- Python SDK
+                                           |     |     |-- Node.js SDK
+                                           |     |     |-- Go SDK
+                                           |     |     |-- LangChain/CrewAI plugin
+                                           |     |     |-- OpenClaw channel
+                                           |     |
+                                           |     |-- Message handlers (shell/LLM)
+```
+
+## Install
+
+Requires the Rust toolchain:
+
+```bash
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+source "$HOME/.cargo/env"
+cargo install toq-cli
+```
+
+On Linux, also install: `sudo apt-get install -y pkg-config libssl-dev build-essential`
+
+## Quick start
+
+```bash
+toq init --name my-agent          # Create workspace
+toq up                            # Start daemon
+toq whoami                        # Show address and public key
+toq send toq://peer/agent "hi"   # Send a message
+toq messages                      # View received messages
+toq down                          # Stop daemon
+```
+
+## Addressing
+
+Format: `toq://<host>/<agent-name>` (default port 9009)
+With port: `toq://<host>:<port>/<agent-name>`
+
+Agent names: lowercase ASCII, digits, hyphens. No leading/trailing hyphens.
+
+Examples:
+- `toq://localhost/agent` (local)
+- `toq://192.168.1.50/assistant` (LAN)
+- `toq://example.com/support-bot` (internet, DNS-discovered)
+
+DNS discovery: TXT record at `_toq._tcp.<domain>` with format `v=toq1; key=<base64>; port=9009; agent=<name>`.
+
+## Connection modes
+
+Each endpoint chooses who can connect:
+
+- **open**: any agent can connect (public services only)
+- **approval** (default): new agents go to a pending list, owner decides
+- **allowlist**: only pre-approved keys/addresses can connect
+- **dns-verified**: agents must have valid DNS TXT records
+
+Block rules always override approve rules. Wildcards supported: `toq://*`, `toq://host/*`, `toq://*/name`.
+
+## Security model
+
+- Identity: Ed25519 keypairs, generated on setup, stored with 0600 permissions
+- Transport: TLS 1.3 minimum, self-signed certs (identity verified at protocol layer)
+- Handshake: magic bytes + mutual challenge-response with Ed25519 signatures
+- Key pinning: TOFU (trust on first use), rotation via signed proofs
+- Content filtering: executable MIME types blocked at protocol level
+- Replay prevention: strictly increasing sequence numbers + UUID dedup
+- Rate limiting: per-IP sliding window on connections
+- Backup encryption: AES-256-GCM with Argon2id key derivation
+
+## Messages and threads
+
+Messages are JSON envelopes with sender, recipient(s), thread ID, sequence number, timestamp, signature, and optional body. Every message gets an ack. Threads group related messages. Either side can close a thread with `thread.close`.
+
+25 message types: handshake (init/response/reject), negotiation (request/response/reject), session (resume/disconnect), approval (request/granted/denied), messaging (send/ack/cancel), streaming (chunk/end), thread (close), system (heartbeat/heartbeat.ack/backpressure/backpressure.clear/error/key_rotation/key_rotation.ack), card (exchange).
+
+## Streaming
+
+For real-time delivery (LLM token streaming):
+
+```python
+stream = client.stream_start("toq://peer/agent")
+for token in llm_output:
+    client.stream_chunk(stream["stream_id"], token)
+client.stream_end(stream["stream_id"])
+```
+
+Each chunk is individually acked to prevent TCP deadlock.
+
+## Message handlers
+
+Handlers auto-process incoming messages. Two types:
+
+Shell handlers run a command with message data in env vars and stdin:
+```bash
+toq handler add logger --command "bash log.sh" --from "toq://*/alice"
+```
+Env vars: `TOQ_FROM`, `TOQ_TEXT`, `TOQ_THREAD_ID`, `TOQ_TYPE`, `TOQ_ID`, `TOQ_HANDLER`, `TOQ_URL`.
+
+LLM handlers route messages to an AI provider for conversational replies:
+```bash
+toq handler add chat --provider anthropic --model claude-sonnet-4-20250514 \
+  --prompt "You are a helpful assistant" --auto-close
+```
+Providers: openai, anthropic, bedrock, ollama. Supports max turns, auto-close (LLM decides when to end), and per-thread conversation memory.
+
+Filter rules: `--from` (address/wildcard), `--key` (public key), `--type` (message type). Same filter type = OR, different types = AND.
+
+## CLI commands
+
+Getting started: `toq init`, `toq setup`, `toq whoami`
+Daemon: `toq up`, `toq down`, `toq status`, `toq agents`
+Messaging: `toq send`, `toq messages`, `toq peers`, `toq ping`, `toq discover`
+Handlers: `toq handler add|list|remove|enable|disable|stop|logs`
+Security: `toq approvals`, `toq approve`, `toq deny`, `toq revoke`, `toq block`, `toq unblock`, `toq permissions`
+Config: `toq config show`, `toq config set`
+Maintenance: `toq doctor`, `toq logs`, `toq clear-logs`, `toq export`, `toq import`, `toq rotate-keys`, `toq upgrade`
+A2A: `toq a2a enable`, `toq a2a disable`, `toq a2a status`
+
+Global: `--config-dir <path>` overrides config directory.
+
+## Python SDK
+
+```bash
+pip install toq
+```
+
+```python
+import toq
+
+# Sync
+client = toq.connect()
+client.send("toq://peer/agent", "hello")
+messages = client.history(limit=10)
+
+# Async with streaming
+async_client = toq.connect_async()
+await async_client.send("toq://peer/agent", "hello")
+async for msg in async_client.messages():
+    print(f"{msg.sender}: {msg.body}")
+    await msg.reply("got it")
+```
+
+Full API: send, stream_start/chunk/end, peers, block/unblock, approvals, approve/deny/revoke, permissions, ping, history, discover, status, health, shutdown, handlers, config, card, rotate_keys, export_backup/import_backup, diagnostics.
+
+## Node.js SDK
+
+```bash
+npm install @toqprotocol/toq
+```
+
+```javascript
+import { connect } from '@toqprotocol/toq';
+
+const client = connect();
+await client.send('toq://peer/agent', 'hello');
+
+for await (const msg of client.messages()) {
+  console.log(`${msg.from}: ${msg.body?.text}`);
+  await msg.reply('got it');
+}
+```
+
+Same API surface as Python SDK with camelCase method names.
+
+## Go SDK
+
+```go
+import "github.com/toqprotocol/toq-sdk-go"
+
+client := toq.Connect("")
+client.Send("toq://peer/agent", "hello", nil)
+
+msgs, _ := client.Messages()
+for msg := range msgs {
+    msg.Reply("got it")
+}
+```
+
+Zero dependencies. Channel-based message streaming.
+
+## Framework plugins
+
+**LangChain:**
+```python
+from toq_langchain import connect, listen
+client = connect()
+tools = client.tools()  # 17 LangChain tools
+```
+
+**CrewAI:**
+```python
+from toq_crewai import connect, listen
+client = connect()
+tools = client.tools()  # 17 CrewAI tools
+```
+
+Both plugins auto-install the toq binary, run setup, and start the daemon. Zero manual configuration.
+
+**OpenClaw:** Install the toq skill from ClawHub. The skill teaches the agent all toq CLI commands. Channel plugin delivers toq messages into the OpenClaw conversation.
+
+## Local HTTP API
+
+The daemon exposes a REST API on localhost (default port 9009). 26 endpoints:
+
+Messages: `POST /v1/messages` (send), `GET /v1/messages` (SSE stream)
+Streaming: `POST /v1/stream/start|chunk|end`
+Threads: `GET /v1/threads/{id}`
+Peers: `GET /v1/peers`
+Security: `POST|DELETE /v1/block`, `POST /v1/approve`, `POST /v1/revoke`, `GET /v1/approvals`, `POST /v1/approvals/{id}`, `GET /v1/permissions`
+Discovery: `GET /v1/discover`, `GET /v1/discover/local`, `POST /v1/ping`
+History: `GET /v1/messages/history`
+Daemon: `GET /v1/health`, `GET /v1/status`, `POST /v1/daemon/shutdown`
+Config: `GET|PATCH /v1/config`, `GET /v1/card`
+Handlers: `GET|POST /v1/handlers`, `DELETE|PUT /v1/handlers/{name}`, `POST /v1/handlers/reload|stop`
+Keys: `POST /v1/keys/rotate`
+Backup: `POST /v1/backup/export|import`
+Logs: `GET|DELETE /v1/logs`, `GET /v1/diagnostics`, `GET /v1/upgrade/check`
+
+SSE stream supports server-side filtering: `GET /v1/messages?from=toq://host/*&type=message.send`
+
+## Configuration
+
+Config file: `config.toml` in the toq data directory.
+
+Resolution order for data directory:
+1. `TOQ_CONFIG_DIR` env var
+2. `.toq/` in current directory (workspace mode)
+3. `~/.toq/` (global)
+
+Key config fields: `agent_name`, `host`, `port`, `connection_mode`, `adapter`, `a2a_enabled`, `message_history_limit`, `max_message_size`, `max_connections`.
+
+Files in data directory: `config.toml`, `permissions.toml`, `handlers.toml`, `keys/identity.key`, `keys/tls_cert.pem`, `keys/tls_key.pem`, `peers.json`, `messages.jsonl`, `logs/`.
+
+## Workspaces
+
+Run multiple agents on one machine:
+```bash
+mkdir agent-a && cd agent-a && toq init --name alice --port auto && toq up
+mkdir agent-b && cd agent-b && toq init --name bob --port auto && toq up
+```
+
+Each workspace gets its own `.toq/` directory with independent config, keys, and handlers. Ports auto-assigned to avoid conflicts.
+
+## Troubleshooting
+
+Common issues:
+- "Connection refused": target agent not running or wrong address/port
+- "Connection pending approval": target is in approval mode, needs `toq approve`
+- "Blocked": you're on the target's blocklist
+- Port 9009 in use: another agent is running, use `toq agents` to check
+- DNS not resolving: verify TXT record at `_toq._tcp.<domain>` with `toq discover <domain>`
+- Keys not found: run `toq setup` or `toq init && toq up` (keys auto-generate on first start)
+
+Diagnostics: `toq doctor` checks setup, keys, TLS cert, port, DNS, and disk.
+
+## Repositories
+
+- [toq](https://github.com/toqprotocol/toq): Reference implementation (Rust). Core library + CLI daemon.
+- [toq-spec](https://github.com/toqprotocol/toq-spec): Protocol specification (27 sections).
+- [toq-sdk-python](https://github.com/toqprotocol/toq-sdk-python): Python SDK.
+- [toq-sdk-node](https://github.com/toqprotocol/toq-sdk-node): Node.js/TypeScript SDK.
+- [toq-sdk-go](https://github.com/toqprotocol/toq-sdk-go): Go SDK.
+- [toq-plugins](https://github.com/toqprotocol/toq-plugins): LangChain, CrewAI, and shared plugin infrastructure.
+- [toq-openclaw](https://github.com/toqprotocol/toq-openclaw): OpenClaw skill, channel plugin, and relay.
+- [toq-website](https://github.com/toqprotocol/toq-website): Documentation site (toq.dev).
+
+## Documentation
+
+- [Overview](https://toq.dev/getting-started/overview/): What toq is and how it works
+- [Quickstart](https://toq.dev/getting-started/quickstart/): Install and send your first message
+- [Core Concepts](https://toq.dev/getting-started/concepts/): Addresses, connections, threads, security
+- [CLI Commands](https://toq.dev/cli/commands/): Complete CLI reference
+- [Connection Modes](https://toq.dev/guides/connection-modes/): Security policy configuration
+- [Message Handlers](https://toq.dev/guides/message-handlers/): Shell and LLM handler setup
+- [Conversational Handlers](https://toq.dev/guides/conversational-handlers/): Multi-turn LLM conversations
+- [Remote Agents](https://toq.dev/guides/remote/): Cloud deployment guide
+- [Python SDK](https://toq.dev/sdks/python/): Python client documentation
+- [Node.js SDK](https://toq.dev/sdks/node/): Node.js client documentation
+- [Go SDK](https://toq.dev/sdks/go/): Go client documentation
+- [LangChain](https://toq.dev/frameworks/langchain/): LangChain integration
+- [CrewAI](https://toq.dev/frameworks/crewai/): CrewAI integration
+- [OpenClaw](https://toq.dev/frameworks/openclaw/): OpenClaw integration
+- [Local API](https://toq.dev/api/): HTTP API reference
+- [A2A Bridge](https://toq.dev/bridge/a2a/): A2A protocol compatibility
+- [Protocol Specification](https://toq.dev/specification/protocol/): Full protocol spec
+
+## Optional
+
+- [Alpha Notice](https://toq.dev/getting-started/alpha-notice/): Current limitations and expectations
+- [GitHub Organization](https://github.com/toqprotocol): All source repositories
