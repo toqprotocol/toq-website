@@ -1,0 +1,3 @@
+[submodule "toq-spec"]
+	path = toq-spec
+	url = https://github.com/toqprotocol/toq-spec.git

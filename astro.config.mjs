@@ -1,6 +1,7 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
+import rehypeMermaid from 'rehype-mermaid';
 
 import react from '@astrojs/react';
 import tailwindcss from '@tailwindcss/vite';
@@ -8,6 +9,13 @@ import toqTheme from './src/themes/toq-light.json';
 
 // https://astro.build/config
 export default defineConfig({
+  markdown: {
+    syntaxHighlight: {
+      type: 'shiki',
+      excludeLangs: ['mermaid'],
+    },
+    rehypePlugins: [[rehypeMermaid, { strategy: 'img-svg', mermaidConfig: { theme: 'neutral' } }]],
+  },
   integrations: [starlight({
 			title: 'toq protocol',
 			customCss: ['./src/styles/global.css'],
@@ -51,7 +59,7 @@ export default defineConfig({
           {
               label: 'CLI Reference',
               items: [
-                  { label: 'Commands', slug: 'cli/commands' },
+                  { label: 'CLI Commands', slug: 'cli/commands' },
               ],
           },
           {
@@ -65,9 +73,9 @@ export default defineConfig({
           {
               label: 'SDKs',
               items: [
-                  { label: 'Python', slug: 'sdks/python' },
-                  { label: 'Node.js', slug: 'sdks/node' },
-                  { label: 'Go', slug: 'sdks/go' },
+                  { label: 'Python SDK', slug: 'sdks/python' },
+                  { label: 'Node.js SDK', slug: 'sdks/node' },
+                  { label: 'Go SDK', slug: 'sdks/go' },
               ],
           },
           {
@@ -83,7 +91,7 @@ export default defineConfig({
           {
               label: 'Specification',
               items: [
-                  { label: 'Protocol', slug: 'specification/protocol' },
+                  { label: 'Protocol Specification', slug: 'specification/protocol' },
               ],
           },
 			],

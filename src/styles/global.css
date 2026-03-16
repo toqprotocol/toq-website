@@ -360,3 +360,11 @@ li.pagefind-ui__result:hover {
   --sl-color-asides-border: var(--sl-color-accent);
   background-color: #fde8cc;
 }
+
+/* Hide the duplicate H1 from the spec file (Starlight already renders the title from frontmatter) */
+.sl-markdown-content > .sl-heading-wrapper:first-child h1 {
+  display: none;
+}
+.sl-markdown-content > .sl-heading-wrapper:first-child {
+  display: none;
+}

@@ -20,3 +20,6 @@ pnpm-debug.log*
 # macOS-specific files
 .DS_Store
 .vscode/
+
+# Spec file copied from submodule at build time (source of truth: toq-spec/)
+src/content/docs/specification/protocol.md

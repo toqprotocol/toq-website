@@ -3,9 +3,10 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
-    "dev": "astro dev",
-    "start": "astro dev",
-    "build": "astro build",
+    "sync-spec": "cp toq-spec/v0.1/protocol.md src/content/docs/specification/protocol.md",
+    "dev": "npm run sync-spec && astro dev",
+    "start": "npm run sync-spec && astro dev",
+    "build": "npm run sync-spec && astro build",
     "preview": "astro preview",
     "astro": "astro"
   },
@@ -18,8 +19,10 @@
     "astro": "^5.18.1",
     "framer-motion": "^12.35.2",
     "liquid-glass-react": "^1.1.1",
+    "playwright": "^1.58.2",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
+    "rehype-mermaid": "^3.0.0",
     "sharp": "^0.34.5",
     "tailwindcss": "^4.2.1",
     "zod": "^3.25.76"
