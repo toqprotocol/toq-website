@@ -3,9 +3,9 @@ title: A2A Compatibility
 description: Your toq agent speaks A2A out of the box
 ---
 
-toq agents speak A2A natively. Enable it with one config line and any agent that uses A2A can reach yours, on the same port it already uses for toq protocol. No separate process, no extra infrastructure.
+toq agents speak A2A natively. Enable it with one command and any agent that uses A2A can reach yours, on the same port it already uses for toq protocol. No separate process, no extra infrastructure.
 
-Going the other direction works too. Your toq agent can send messages to any A2A agent by using its HTTPS URL instead of a toq address.
+Going the other direction works too. Your toq agent can send messages to any A2A agent just by using its URL.
 
 ## Turn it on
 
@@ -14,7 +14,7 @@ toq a2a enable --key "pick-a-secret"
 toq down && toq up
 ```
 
-That's it. Your agent now has an agent card at `/.well-known/agent-card.json` and a JSON-RPC endpoint at `/a2a`, both on port 9009. The `--key` flag is optional. Leave it out if you want open access.
+That's it. Other A2A agents can now discover and talk to yours on port 9009. The `--key` flag is optional. Leave it out if you want open access.
 
 Check the status anytime:
 
@@ -30,9 +30,9 @@ toq a2a disable
 
 ## Other agents reaching yours
 
-From the outside, your toq agent looks like any standard A2A agent. Other agents discover it through the agent card, send JSON-RPC requests, and get responses. Your configured handlers (LLM, shell, SDK) process the messages and reply.
+From the outside, your toq agent looks like any standard A2A agent. Other agents discover it, send messages, and get responses. Your configured handlers (LLM, shell, SDK) process the messages and reply.
 
-Here's what it looks like with the official A2A Python SDK:
+Here's a complete working example with the official A2A Python SDK (`pip install a2a-sdk`):
 
 ```python
 import asyncio, httpx
@@ -87,13 +87,30 @@ curl -X POST http://127.0.0.1:9009/v1/messages \
   -d '{"to": "https://some-a2a-agent.example.com", "body": {"text": "Hello"}, "a2a_auth": "their-token"}'
 ```
 
-The daemon fetches the agent card from `/.well-known/agent-card.json` at that URL. If it finds one, it sends via A2A. If not, it tells you the target isn't an A2A agent. No guessing.
+The daemon checks whether the target is an A2A agent before sending. If it is, the message goes through. If not, you get a clear error.
+
+## Addressing
+
+Each toq agent runs on its own port. In toq protocol, the agent name is part of the address (`toq://yourdomain.com/alice`), and DNS maps that name to the right port. In A2A, there's no agent name in the URL. The port is the identifier.
+
+If you run one agent, A2A clients just use your domain and port: `http://yourdomain.com:9009`.
+
+If you run multiple agents on the same machine, each one has a different port. Give A2A clients the right port for the agent they want:
+
+| Agent | toq address | A2A URL |
+|-------|------------|---------|
+| alice | `toq://yourdomain.com/alice` | `http://yourdomain.com:9009` |
+| bob | `toq://yourdomain.com/bob` | `http://yourdomain.com:9010` |
+
+For a cleaner setup with path-based URLs (`http://yourdomain.com/alice`), you can put a reverse proxy like nginx in front. Set `a2a_public_url` in each agent's config so the agent card advertises the right URL:
+
+```toml
+a2a_public_url = "https://yourdomain.com/alice/a2a"
+```
 
 ## Streaming
 
-Streaming works over Server-Sent Events. An agent calling `message/stream` gets real-time task lifecycle events: the task being created, status changing to working, artifact chunks arriving, and the final completion.
-
-The agent card advertises `streaming: true` so clients know it's available.
+Streaming is supported out of the box. When another agent sends a streaming request, they get real-time updates as your handler works: status changes, the response text as it arrives, and a completion signal. You don't need to configure anything. The agent card advertises streaming support automatically.
 
 ## What's supported
 
@@ -110,16 +127,9 @@ All core A2A methods work, in both the v0.3 format (what the current SDK sends) 
 
 Push notifications are not supported. The agent card honestly advertises this.
 
-## Agent card customization
+## Security
 
-The agent card is generated automatically from your config. If your agent is behind a reverse proxy or NAT, override the public URL:
-
-```toml
-a2a_public_url = "https://my-agent.example.com/a2a"
-```
-
-## Security notes
-
-The A2A endpoint (`/a2a`) is accessible from any IP. Your local API (`/v1/*`) is not. These are on the same port but the daemon routes them to different handlers based on the source IP.
-
-Remote connections are rate-limited. Bearer token auth is constant-time comparison to prevent timing attacks. Outbound A2A requests block cloud metadata and link-local addresses.
+- The A2A endpoint is accessible from any IP so remote agents can reach you. Your local API (`/v1/*`) stays localhost-only.
+- Remote connections are rate-limited.
+- If you set an API key with `toq a2a enable --key`, other agents need that key to send messages to you. When your agent sends to other A2A agents, you provide their key separately (via `a2a_auth`). The agent card stays public so agents can still discover you.
+- Outbound A2A requests won't follow redirects or connect to internal network addresses.

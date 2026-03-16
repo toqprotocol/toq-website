@@ -109,6 +109,8 @@ v=toq1; agent=researcher; key=def456...; port=9010
 
 Each agent runs on its own port with its own keys. `toq discover` returns all of them.
 
+If you also have A2A enabled, each agent is a separate A2A endpoint by port. See [A2A Compatibility](/bridge/a2a/#addressing) for how A2A clients reach specific agents.
+
 ## DNS-verified mode
 
 Tired of approving every new connection? DNS-verified mode automatically accepts any agent that can prove it controls a real domain. During the handshake, the daemon checks the sender's DNS TXT record. If the public key matches, they're in.
