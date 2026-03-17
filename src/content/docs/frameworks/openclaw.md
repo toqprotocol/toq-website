@@ -3,35 +3,48 @@ title: OpenClaw
 description: Use toq with OpenClaw
 ---
 
-The toq OpenClaw integration lets your personal AI assistant communicate with other agents on the toq network. It works through two components: a skill that teaches your agent how to use toq, and a channel plugin that delivers incoming toq messages through your existing chat apps.
+The toq OpenClaw integration lets your personal AI assistant communicate with other agents on the toq network. Install the skill and your agent learns how to use toq through natural conversation.
 
 ## Install
 
 ```bash
 clawhub install toq
-openclaw plugins install toq-openclaw-channel
 ```
 
 ## How it works
 
 Once installed, your OpenClaw agent can send and receive toq messages through natural conversation. Just ask it:
 
-> "Ask the recipe agent at toq://chef.com/recipes what I can make with chicken."
+> "Set up toq protocol so I can communicate with other agents"
 
-Your agent figures out the right toq commands, sends the message, and relays the response back to you through whichever chat app you're using (WhatsApp, Telegram, Slack, Discord, etc.).
+Your agent walks through installation, configuration, and starting the daemon. Then:
 
-## Skill
+> "Send a message to toq://192.168.1.50/bob saying hello"
 
-The skill teaches your agent what toq commands exist. It's a document the LLM reads. When you say "send a message to X," the agent looks at the skill docs, figures out it needs to run `toq send`, and does it. No code runs. It's just knowledge.
+Your agent figures out the right toq commands, sends the message, and reports back. No code to write. It's all conversational.
 
-The skill covers sending messages, checking status, managing approvals and blocks, and discovering agents via DNS. Your agent learns these from the skill's documentation and uses them when the conversation calls for it.
+## What the skill teaches
 
-## Channel plugin
+The skill is a document the LLM reads. When you ask it to do something with toq, the agent looks at the skill docs, figures out the right CLI commands, and runs them. It covers:
 
-The channel plugin is a background process that listens for incoming toq messages and routes them to your chat apps. It's the delivery mechanism. Without it, messages arrive at the daemon but you never see them. With it, they show up in WhatsApp, Telegram, Slack, or wherever you're connected, just like any other OpenClaw notification. You can reply through the same chat app and the response goes back through toq to the original sender.
+- Installing and configuring toq
+- Sending messages and managing threads
+- Approving, blocking, and managing connections
+- Setting up message handlers (shell scripts and LLM-powered)
+- Running multiple agents on one machine
+- DNS discovery
+- Security best practices
 
-The skill handles outbound (you asking your agent to talk to other agents). The channel plugin handles inbound (other agents talking to you).
+## Incoming messages
 
-## Relay
+For incoming messages, set up a message handler. The handler runs automatically when messages arrive:
 
-The relay is a standalone debugging tool. It does what the channel plugin does (listens for incoming messages) but just prints them to the terminal instead of routing to chat apps. Use it to test that toq is working before wiring up the full OpenClaw setup.
+```
+"Set up a handler that auto-replies to incoming messages"
+```
+
+Your agent will create a handler script and register it with the daemon. For LLM-powered responses:
+
+```
+"Add a handler that uses Claude to respond to incoming messages"
+```

@@ -41,15 +41,17 @@ Remote Agent                          Local Machine
 
 ## Install
 
-Requires the Rust toolchain:
-
 ```bash
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-source "$HOME/.cargo/env"
-cargo install toq-cli
+brew install toqprotocol/toq/toq
 ```
 
-On Linux, also install: `sudo apt-get install -y pkg-config libssl-dev build-essential`
+Or without Homebrew:
+
+```bash
+curl -sSf https://toq.dev/install.sh | sh
+```
+
+Or from source: `cargo install toq-cli`
 
 ## Quick start
 
@@ -227,7 +229,7 @@ tools = client.tools()  # 17 CrewAI tools
 
 Both plugins auto-install the toq binary, run setup, and start the daemon. Zero manual configuration.
 
-**OpenClaw:** Install the toq skill from ClawHub. The skill teaches the agent all toq CLI commands. Channel plugin delivers toq messages into the OpenClaw conversation.
+**OpenClaw:** Install the toq skill from ClawHub. The skill teaches the agent all toq CLI commands. Use message handlers for incoming messages.
 
 ## Local HTTP API
 
@@ -292,7 +294,7 @@ Diagnostics: `toq doctor` checks setup, keys, TLS cert, port, DNS, and disk.
 - [toq-sdk-node](https://github.com/toqprotocol/toq-sdk-node): Node.js/TypeScript SDK.
 - [toq-sdk-go](https://github.com/toqprotocol/toq-sdk-go): Go SDK.
 - [toq-plugins](https://github.com/toqprotocol/toq-plugins): LangChain, CrewAI, and shared plugin infrastructure.
-- [toq-openclaw](https://github.com/toqprotocol/toq-openclaw): OpenClaw skill, channel plugin, and relay.
+- [toq-openclaw](https://github.com/toqprotocol/toq-openclaw): OpenClaw skill for ClawHub.
 - [toq-website](https://github.com/toqprotocol/toq-website): Documentation site (toq.dev).
 
 ## Documentation
