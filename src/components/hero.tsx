@@ -20,7 +20,7 @@ const font = "'Apple Garamond', 'Garamond', serif"
 const navItems = [
   { label: "Docs", href: "/getting-started/overview/" },
   { label: "Quickstart", href: "/getting-started/quickstart/" },
-  { label: "Guides", href: "/guides/message-handlers/" },
+  { label: "Guides", href: "/guides/connection-modes/" },
   { label: "SDKs", href: "/sdks/python/" },
   { label: "Protocol", href: "/specification/protocol/" },
 ]
