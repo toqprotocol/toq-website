@@ -3,9 +3,7 @@ title: OpenClaw
 description: Use toq with OpenClaw
 ---
 
-The toq skill turns your OpenClaw agent into a networked agent. Install it, and your agent can set up secure communication with other agents, coordinate multi-agent workflows, and manage complex messaging patterns. All through natural conversation.
-
-No code. No configuration files. Just tell your agent what you want.
+The toq skill turns your OpenClaw agent into a networked agent. Install it, and your agent learns the entire toq protocol. From there, everything happens through conversation.
 
 ## Install
 
@@ -13,118 +11,120 @@ No code. No configuration files. Just tell your agent what you want.
 clawhub install toq
 ```
 
-## What happens next
-
-Your agent now understands the toq protocol. It knows every CLI command, every connection mode, every handler pattern. When you ask it to do something involving other agents, it figures out the right commands and runs them.
-
-Start with:
-
 > "Set up toq so I can communicate with other agents"
 
-Your agent walks you through it conversationally: picks an agent name, detects your IP, configures security, starts the daemon, and runs diagnostics. Two minutes, and you're an endpoint on the network.
+Your agent handles installation, configuration, and startup. Two minutes and you're on the network.
 
-## Real scenarios
+## Send and receive
 
-These aren't hypothetical. Every scenario below was tested end-to-end with OpenClaw agents on live machines. The user typed natural language. The agent handled everything.
+The basics. Your agent knows how to reach other agents and manage conversations.
 
-### Meeting coordinator
+> "Send a message to toq://192.168.1.50/bob asking if he's available"
+>
+> "Check my recent messages"
+>
+> "Reply to Bob's last message saying I'll be there at 3"
+>
+> "Close the thread with Bob"
 
-> "I need to coordinate a meeting between Bob, Charlie, and Diana. Send each of them an availability request for next week, collect their responses, and find a common slot."
+Threads are tracked automatically. Your agent knows which conversation is which and can reply in context or start new ones.
 
-The agent sent structured availability requests to three agents on different machines, parsed their responses, computed the intersection of available time slots, and sent calendar confirmations. When one agent's response had a different format than expected, the agent adapted its parsing on the fly.
+## Monitor your endpoint
 
-### Distributed task pipeline
+Your agent keeps you informed about what's happening on your endpoint.
 
-> "Set up a pipeline where I send a proposal to Bob for review, Bob forwards it to Charlie for approval, and Charlie sends the final decision back to me."
+> "Is toq running?"
+>
+> "Who are my known peers?"
+>
+> "Show me my connections"
+>
+> "Run diagnostics"
+>
+> "What's my toq address?"
 
-The agent created message handlers on each machine that forwarded messages through the chain, embedding the original sender and thread ID so responses could route back. Each agent processed the message, added their assessment, and passed it along. The full approval chain completed across three machines without any manual intervention.
+No need to remember commands. Your agent translates plain questions into the right CLI calls and reports back conversationally.
 
-### Emergency broadcast with acknowledgment tracking
+## Control who gets in
 
-> "Send an emergency notification to all agents on the network and track who acknowledges it."
+Security is a conversation, not a config file. Your agent understands connection modes, wildcards, and the difference between blocking by address versus by public key.
 
-The agent broadcast the message to every known peer, then set up a handler to collect acknowledgments. It maintained a checklist of who responded and who hadn't, and reported the status on request. When asked "who hasn't responded yet?", it gave an immediate answer.
+> "Show me who's tried to connect"
+>
+> "Approve the agent that just pinged us"
+>
+> "Only allow agents from our company domain"
+>
+> "Block everything from that IP"
+>
+> "Revoke access for the agent we approved yesterday"
 
-### Approval chain with audit trail
+Your agent manages the full permission system: approvals, blocks, wildcards, and revocations. It can also switch connection modes on the fly.
 
-> "Create an approval workflow where every step is logged. When a proposal comes in, it needs sign-off from two reviewers before it's approved. Log every decision with timestamps."
+> "Switch to open mode for the next hour, then lock it back down"
 
-The agent set up handlers that wrote to an audit log file at each step. The log captured who approved, when, and what they said. The full trail was queryable after the workflow completed. Every decision was timestamped and attributed.
+## Discover other agents
 
-### Agent discovery and introduction
+Finding agents on the network is conversational too.
 
-> "Find out what agents are available on this network and introduce yourself to each one."
+> "Find agents at example.com"
+>
+> "Ping toq://192.168.1.50/bob and tell me if he's reachable"
+>
+> "Who's out there on the local network?"
 
-The agent used `toq discover` and `toq peers` to find reachable agents, then sent personalized introduction messages to each. It handled the approval dance automatically: when a remote agent required approval, it waited, checked back, and completed the handshake once approved.
+## Automate with handlers
 
-### Collaborative document assembly
-
-> "I need three agents to each write a section of a report. Alice writes the introduction, Bob writes the analysis, and Charlie writes the conclusion. Collect all sections and assemble the final document."
-
-The agent sent specific writing assignments to each agent, collected their responses, assembled them in order, and presented the complete document. This worked on the first attempt with no format mismatches because the agent specified the expected format in each request.
-
-### Incident response escalation
-
-> "Set up an escalation chain. When an alert comes in, the first responder triages it. If it's critical, escalate to the specialist. If the specialist can't resolve it, escalate to the manager."
-
-The agent created tiered handlers with severity-based routing. Each tier had its own logic: the first responder categorized the incident, the specialist attempted resolution, and the manager made the final call. Messages flowed up the chain automatically based on the content of each response.
-
-### Agent reputation tracking
-
-> "Track how reliable each agent is. When they respond on time, increase their score. When they don't respond, decrease it. Show me the leaderboard."
-
-The agent set up a handler that maintained a stats file, tracking response times and completion rates per agent. The reputation data persisted across sessions and was queryable at any time. Stats were tracked across machines, not just locally.
-
-## What makes this different
-
-In every scenario above, the user typed one or two sentences. The agent:
-
-- Installed and configured toq if it wasn't already running
-- Created the right message handlers with the right filters
-- Managed connection approvals bidirectionally
-- Handled message format conventions between agents
-- Adapted when things didn't go as expected
-- Reported results back conversationally
-
-There's no orchestration framework. No workflow DSL. No YAML configuration. The LLM reads the skill documentation, understands the protocol, and builds the solution in real time.
-
-## Handlers are the building blocks
-
-Most of these scenarios use message handlers. A handler is a script that runs when a message arrives. Your agent creates them for you:
+This is where things start to get powerful. Handlers let your endpoint respond to incoming messages automatically, and your OpenClaw agent creates them for you.
 
 > "Set up a handler that auto-replies with my availability when someone asks"
 
-The agent writes a shell script, saves it, registers it with the daemon, and tests it. If something goes wrong, it checks the handler logs and fixes the issue.
+Your agent writes a script, saves it, registers it with the daemon, and tests it. If something breaks, it checks the handler logs and fixes the issue.
 
 For smarter responses, handlers can use LLM providers directly:
 
 > "Add a handler that uses Claude to respond to incoming questions about our product"
 
-The agent registers an LLM-powered handler with a system prompt tailored to your use case. The handler maintains conversation threads, so multi-turn exchanges work naturally.
+The agent registers an LLM-powered handler with a custom system prompt. Multi-turn conversations work naturally because handlers maintain thread context.
 
-## Multiple agents, one machine
+Managing handlers is just as easy:
 
-Need to simulate a network locally? Your agent can set up multiple toq agents on the same machine:
+> "Show me my active handlers"
+>
+> "Disable the auto-reply handler for now"
+>
+> "Check the logs for the support handler"
+>
+> "Remove the old notification handler"
 
-> "Set up three agents on this machine: alice, bob, and charlie. Alice should be in approval mode, Bob in open mode, and Charlie in allowlist mode."
+## Run multiple agents
 
-Each agent gets its own workspace, port, and configuration. Your OpenClaw agent manages all of them through `--config-dir` flags, keeping track of which agent is which.
+Need to test a workflow locally or run several agents on one machine? Your agent sets it up.
 
-## Security is conversational too
+> "Set up three agents on this machine: alice, bob, and charlie"
 
-Connection management happens through natural language:
+Each agent gets its own workspace, port, and security policy. Your agent keeps track of which is which and can manage all of them from one conversation.
 
-> "Block all agents from that suspicious IP"
-> "Only allow agents from our company domain"
-> "Show me who's tried to connect in the last hour"
-> "Approve the agent that just pinged us"
+## Build real workflows
 
-Your agent translates these into the right `toq approve`, `toq block`, and `toq permissions` commands. It understands wildcards, patterns, and the difference between blocking by address versus by public key.
+Everything above is a building block. When you combine messaging, handlers, approvals, and multiple agents, your OpenClaw agent can construct sophisticated multi-agent systems from a single conversation.
+
+We tested this extensively across real machines. Every scenario below was built entirely through natural conversation with an OpenClaw agent. No code written by the user. No configuration files edited by hand.
+
+**Task pipelines.** A user asked their agent to set up a three-stage approval chain across three machines. The agent created handlers on each machine that processed incoming proposals, added assessments, and forwarded them to the next stage. It embedded the original sender and thread ID in each forwarded message so the final decision routed back to the person who submitted the proposal. The full chain ran without manual intervention.
+
+**Broadcast and tracking.** A user asked their agent to send an urgent notification to every known peer and track acknowledgments. The agent broadcast the message, set up a handler to collect responses, maintained a checklist, and could report at any time who had responded and who was still outstanding.
+
+**Collaborative assembly.** A user asked three agents to each write a section of a report. The coordinating agent sent specific assignments, collected the responses, assembled them in order, and presented the complete document. It worked on the first attempt because the agent specified the expected format in each outgoing request.
+
+**Escalation chains.** A user asked their agent to build a tiered incident response system. The agent created handlers with severity-based routing: incoming alerts went to a first responder for triage, critical issues escalated to a specialist, and unresolved issues escalated to a manager. Each tier had its own logic and the messages flowed automatically based on content.
+
+**Reputation tracking.** A user asked their agent to track how reliable each peer was. The agent set up a handler that maintained persistent stats across sessions, tracking response times and completion rates per agent, queryable as a leaderboard at any time.
+
+In every case, the user described what they wanted in a few sentences. The agent figured out the handlers, the message formats, the approval flows, and the error handling on its own.
 
 ## Getting started
 
 1. Install the skill: `clawhub install toq`
 2. Tell your agent: "Set up toq protocol"
-3. Follow the conversation. Your agent handles the rest.
-
-Once running, the only limit is what you can describe. If you can explain the workflow in plain English, your agent can build it with toq.
+3. Start with a message. Build from there.
