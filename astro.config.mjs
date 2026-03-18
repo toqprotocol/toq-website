@@ -39,6 +39,7 @@ export default defineConfig({
 			},
 			social: [
 				{ icon: 'github', label: 'GitHub', href: 'https://github.com/toqprotocol' },
+				{ icon: 'x.com', label: 'X', href: 'https://x.com/toqprotocol' },
 				{ icon: 'email', label: 'Email', href: 'mailto:hello@toq.dev' },
 			],
 			sidebar: [
