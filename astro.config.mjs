@@ -37,7 +37,10 @@ export default defineConfig({
 				ThemeProvider: './src/components/ForceLightTheme.astro',
 				ThemeSelect: './src/components/EmptyComponent.astro',
 			},
-			social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/toqprotocol' }],
+			social: [
+				{ icon: 'github', label: 'GitHub', href: 'https://github.com/toqprotocol' },
+				{ icon: 'email', label: 'Email', href: 'mailto:hello@toq.dev' },
+			],
 			sidebar: [
           {
               label: 'Getting Started',
